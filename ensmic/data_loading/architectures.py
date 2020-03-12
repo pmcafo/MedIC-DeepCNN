@@ -24,3 +24,18 @@ architecture_list = [
     'EfficientNetB4',
     'InceptionResNetV2',
     'MobileNetV2',
+    'VGG16',
+    'Xception'
+    ]
+
+architecture_params = {
+  "Vanilla": 522052,
+  "DenseNet121": 7033282,
+  "EfficientNetB4": 17676541,
+  "InceptionResNetV2": 54339234,
+  "MobileNetV2": 2259970,
+  "ResNet101": 42656002,
+  "ResNeXt101": 42264386,
+  "VGG16": 14714562,
+  "Xception": 20865002
+}
