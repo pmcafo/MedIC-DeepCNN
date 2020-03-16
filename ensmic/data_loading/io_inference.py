@@ -37,4 +37,17 @@ Methods:
 class IO_Inference():
     #---------------------------------------------#
     #                Initialization               #
-    #---------------------------------------------
+    #---------------------------------------------#
+    def __init__(self, class_names, path):
+        # Create output directory
+        self.path_inf = path
+        # Store class dictionary
+        self.class_list = class_names
+
+    #---------------------------------------------#
+    #              Inference Loading              #
+    #---------------------------------------------#
+    def load_inference(self, index=None, with_legend=False):
+        # Load inference JSON
+        with open(self.path_inf, "r") as file:
+            inference = json.load(file)
