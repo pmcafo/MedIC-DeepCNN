@@ -51,3 +51,15 @@ class IO_Inference():
         # Load inference JSON
         with open(self.path_inf, "r") as file:
             inference = json.load(file)
+        # Remove legend
+        if index is None and not with_legend: del inference["legend"]
+        # Return either complete dictionary or inference for a single sample
+        if index is not None : return inference[index]
+        else : return inference
+
+    #---------------------------------------------#
+    #              Inference Storage              #
+    #---------------------------------------------#
+    def store_inference(self, samples, preds):
+        # Create a new inference JSON object
+ 
