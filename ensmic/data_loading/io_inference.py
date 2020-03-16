@@ -25,4 +25,16 @@ import json
 import numpy as np
 
 #-----------------------------------------------------#
-#               Inference I
+#               Inference IO Interface                #
+#-----------------------------------------------------#
+""" Class to handle all kinds of input/output functionality for inference.
+
+Methods:
+    __init__                Object creation function
+    load_inference:         Load already stored predictions
+    store_inference:        Store a prediction to disk
+"""
+class IO_Inference():
+    #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------
