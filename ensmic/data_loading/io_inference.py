@@ -62,4 +62,9 @@ class IO_Inference():
     #---------------------------------------------#
     def store_inference(self, samples, preds):
         # Create a new inference JSON object
- 
+        data = {"legend": self.class_list}
+        # Append predictions to inference JSON
+        data.update(dict(zip(samples, preds.tolist())))
+        # Store inference JSON to disk
+        with open(self.path_inf, "w") as file:
+            json.dump(data, file, indent=2)
