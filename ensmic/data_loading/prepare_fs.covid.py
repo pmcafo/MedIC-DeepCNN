@@ -40,4 +40,18 @@ path_target = "data"
 
 # Sampling strategy (in percentage)
 sampling_splits = [0.65, 0.10, 0.10, 0.15]
-sampling_na
+sampling_names = ["train-model", "val-model", "val-ensemble", "test"]
+# Prefix/Seed (if training multiple runs)
+seed = "covid"
+
+#-----------------------------------------------------#
+#         Parse Dataset & File Structure Setup        #
+#-----------------------------------------------------#
+print("Start parsing data set")
+# Check if input path is available
+if not os.path.exists(path_input):
+    raise IOError(
+        "Images path, {}, could not be resolved".format(str(path_input))
+    )
+# Create ensmic data structure
+if not
