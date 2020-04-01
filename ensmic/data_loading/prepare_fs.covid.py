@@ -54,4 +54,17 @@ if not os.path.exists(path_input):
         "Images path, {}, could not be resolved".format(str(path_input))
     )
 # Create ensmic data structure
-if not
+if not os.path.exists(path_target) : os.mkdir(path_target)
+img_dir = os.path.join(path_target, seed + "." + "images")
+if not os.path.exists(img_dir) : os.mkdir(img_dir)
+
+# Load classification via AUCMEDI
+ds = input_interface(interface="directory", path_imagedir=path_input,
+                     training=True)
+(index_list, class_ohe, nclasses, class_names, image_format) = ds
+
+# Iterate over each image
+sample_list = []
+for i, index in enumerate(tqdm(index_list)):
+    # Pseudonymization
+    pseudonym = str(seed) 
