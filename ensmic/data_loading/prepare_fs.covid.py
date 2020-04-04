@@ -67,4 +67,15 @@ ds = input_interface(interface="directory", path_imagedir=path_input,
 sample_list = []
 for i, index in enumerate(tqdm(index_list)):
     # Pseudonymization
-    pseudonym = str(seed) 
+    pseudonym = str(seed) + "." + "img_" + str(i) + ".png"
+    # Store image in file structure
+    path_img_in = os.path.join(path_input, index)
+    path_img_out = os.path.join(img_dir, pseudonym)
+    copyfile(path_img_in, path_img_out)
+    sample_list.append(pseudonym)
+
+#-----------------------------------------------------#
+#               Create Dataset Sampling               #
+#-----------------------------------------------------#
+print("Start dataset sampling")
+sampling = sampling_split(sample_list, c
