@@ -64,4 +64,20 @@ path_csv = os.path.join(path_input, 'trainLabels.csv')
 
 ds = input_interface(interface="csv", path_imagedir=path_images, path_data=path_csv, training=True,
                      ohe=False, col_sample="image", col_class="level")
-(index_list, class_ohe, nclasses, class_names, image_format) = d
+(index_list, class_ohe, nclasses, class_names, image_format) = ds
+
+# Modify class names
+class_names = ['No DR', 'Mild', 'Moderate', 'Severe', 'Proliferative DR']
+
+# Iterate over each image
+sample_list = []
+for i, index in enumerate(tqdm(index_list)):
+    # Pseudonymization
+    pseudonym = str(seed) + "." + "img_" + str(i)
+    # Store image in file structure
+    path_img_in = os.path.join(path_images, index + "." + image_format)
+    path_img_out = os.path.join(img_dir, pseudonym + "." + image_format)
+    copyfile(path_img_in, path_img_out)
+    sample_list.append(pseudonym)
+
+#-------------
