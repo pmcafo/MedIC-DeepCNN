@@ -54,4 +54,14 @@ if not os.path.exists(path_input):
         "Images path, {}, could not be resolved".format(str(path_input))
     )
 # Create ensmic data structure
-if not os.path.exist
+if not os.path.exists(path_target) : os.mkdir(path_target)
+img_dir = os.path.join(path_target, seed + "." + "images")
+if not os.path.exists(img_dir) : os.mkdir(img_dir)
+
+# Load classification via AUCMEDI
+path_images = os.path.join(path_input, 'train')
+path_csv = os.path.join(path_input, 'trainLabels.csv')
+
+ds = input_interface(interface="csv", path_imagedir=path_images, path_data=path_csv, training=True,
+                     ohe=False, col_sample="image", col_class="level")
+(index_list, class_ohe, nclasses, class_names, image_format) = d
