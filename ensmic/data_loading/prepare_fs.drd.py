@@ -26,4 +26,19 @@ import json
 from shutil import copyfile
 from tqdm import tqdm
 # AUCMEDI libraries
-from aucmedi.sampl
+from aucmedi.sampling import sampling_split
+from aucmedi import input_interface
+# Internal libraries/scripts
+from ensmic.data_loading import sampling_to_disk
+
+#-----------------------------------------------------#
+#                    Configurations                   #
+#-----------------------------------------------------#
+# File structure
+path_input = "data.drd"
+path_target = "data"
+
+# Sampling strategy (in percentage)
+sampling_splits = [0.65, 0.10, 0.10, 0.15]
+sampling_names = ["train-model", "val-model", "val-ensemble", "test"]
+# P
