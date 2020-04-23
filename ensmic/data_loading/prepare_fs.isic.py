@@ -1,3 +1,4 @@
+
 #==============================================================================#
 #  Author:       Dominik Müller                                                #
 #  Copyright:    2021 IT-Infrastructure for Translational Medical Research,    #
@@ -35,14 +36,14 @@ from ensmic.data_loading import sampling_to_disk
 #                    Configurations                   #
 #-----------------------------------------------------#
 # File structure
-path_input = "data.drd"
+path_input = "data.isic"
 path_target = "data"
 
 # Sampling strategy (in percentage)
 sampling_splits = [0.65, 0.10, 0.10, 0.15]
 sampling_names = ["train-model", "val-model", "val-ensemble", "test"]
 # Prefix/Seed (if training multiple runs)
-seed = "drd"
+seed = "isic"
 
 #-----------------------------------------------------#
 #         Parse Dataset & File Structure Setup        #
@@ -59,15 +60,12 @@ img_dir = os.path.join(path_target, seed + "." + "images")
 if not os.path.exists(img_dir) : os.mkdir(img_dir)
 
 # Load classification via AUCMEDI
-path_images = os.path.join(path_input, 'train')
-path_csv = os.path.join(path_input, 'trainLabels.csv')
+path_images = os.path.join(path_input, 'ISIC_2019_Training_Input')
+path_csv = os.path.join(path_input, 'ISIC_2019_Training_GroundTruth.csv')
 
 ds = input_interface(interface="csv", path_imagedir=path_images, path_data=path_csv, training=True,
-                     ohe=False, col_sample="image", col_class="level")
+                     ohe=True, col_sample="image", ohe_range=["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"])
 (index_list, class_ohe, nclasses, class_names, image_format) = ds
-
-# Modify class names
-class_names = ['No DR', 'Mild', 'Moderate', 'Severe', 'Proliferative DR']
 
 # Iterate over each image
 sample_list = []
