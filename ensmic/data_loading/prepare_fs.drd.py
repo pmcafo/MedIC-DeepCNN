@@ -80,4 +80,13 @@ for i, index in enumerate(tqdm(index_list)):
     copyfile(path_img_in, path_img_out)
     sample_list.append(pseudonym)
 
-#-------------
+#-----------------------------------------------------#
+#               Create Dataset Sampling               #
+#-----------------------------------------------------#
+print("Start dataset sampling")
+sampling = sampling_split(sample_list, class_ohe, sampling=sampling_splits,
+                          stratified=True, iterative=False, seed=0)
+
+# Store sample sets to disk
+sampling_to_disk(sampling, setnames=sampling_names, class_names=class_names,
+                 path_data=path_target, seed=str(
