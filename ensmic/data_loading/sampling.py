@@ -38,4 +38,14 @@ def sampling_to_disk(sample_sets, setnames, class_names, path_data, seed):
         # Write JSON to disk
         path_json = os.path.join(path_data, str(seed) + "." + set + ".json")
         with open(path_json, "w") as jsonfile:
-            json.dump(sampl
+            json.dump(sampling, jsonfile, indent=2)
+
+#-----------------------------------------------------#
+#               Load Sampling from disk               #
+#-----------------------------------------------------#
+def load_sampling(path_input, subset, seed):
+    # Initialize pathes
+    path_images = os.path.join(path_input, seed + ".images")
+    path_json = os.path.join(path_input, seed + "." + subset + ".json")
+    # Run AUCMEDI JSON loader
+    ds = input_interface(interface="json", path_image
