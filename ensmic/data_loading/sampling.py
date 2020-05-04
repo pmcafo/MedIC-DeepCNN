@@ -28,4 +28,14 @@ from aucmedi import input_interface
 #-----------------------------------------------------#
 #               Store Sampling to disk                #
 #-----------------------------------------------------#
-def sampling_to_disk(sample_sets, setnames, c
+def sampling_to_disk(sample_sets, setnames, class_names, path_data, seed):
+    # Create each subset
+    for i, set in enumerate(setnames):
+        # Parse sampling to JSON
+        sampling = {"legend": class_names}
+        sampling.update(dict(zip(sample_sets[i][0].tolist(),
+                                 sample_sets[i][1].tolist())))
+        # Write JSON to disk
+        path_json = os.path.join(path_data, str(seed) + "." + set + ".json")
+        with open(path_json, "w") as jsonfile:
+            json.dump(sampl
