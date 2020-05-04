@@ -16,4 +16,16 @@
 #  You should have received a copy of the GNU General Public License           #
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
 #==============================================================================#
-#
+#-----------------------------------------------------#
+#                   Library imports                   #
+#-----------------------------------------------------#
+# External libraries
+import os
+import json
+# AUCMEDI libraries
+from aucmedi import input_interface
+
+#-----------------------------------------------------#
+#               Store Sampling to disk                #
+#-----------------------------------------------------#
+def sampling_to_disk(sample_sets, setnames, c
