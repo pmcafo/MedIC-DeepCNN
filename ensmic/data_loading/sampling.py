@@ -48,4 +48,7 @@ def load_sampling(path_input, subset, seed):
     path_images = os.path.join(path_input, seed + ".images")
     path_json = os.path.join(path_input, seed + "." + subset + ".json")
     # Run AUCMEDI JSON loader
-    ds = input_interface(interface="json", path_image
+    ds = input_interface(interface="json", path_imagedir=path_images,
+                         path_data=path_json, training=True, ohe=True)
+    # Return dataset
+    return ds
