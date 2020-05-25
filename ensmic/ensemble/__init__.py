@@ -14,4 +14,14 @@
 #  GNU General Public License for more details.                                #
 #                                                                              #
 #  You should have received a copy of the GNU General Public License           #
-#  along with this program.  If not, see <http://www.gnu.org/licenses
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
+#==============================================================================#
+# Mean Approaches
+from ensmic.ensemble.mean_unweighted import ELM_MeanUnweighted
+from ensmic.ensemble.mean_weighted import ELM_MeanWeighted
+# Majority Voting Approaches
+from ensmic.ensemble.majorityvote_hard import ELM_MajorityVote_Hard
+from ensmic.ensemble.majorityvote_soft import ELM_MajorityVote_Soft
+# Machine Learning Approaches
+from ensmic.ensemble.decision_tree import ELM_DecisionTree
+fro
