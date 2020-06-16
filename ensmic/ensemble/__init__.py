@@ -44,4 +44,8 @@ ensembler_dict = {"BestModel":ELM_BestModel,
                   "LogisticRegression":ELM_LogisticRegression,
                   "k-NearestNeighbors":ELM_kNearestNeighbors,
                   "NaiveBayes":ELM_NaiveBayes,
-                  "SupportVectorMachine":ELM_Suppo
+                  "SupportVectorMachine":ELM_SupportVectorMachine,
+                  "GaussianProcess":ELM_GaussianProcess,
+                  }
+# List of implemented Ensemblers
+ensembler = list(ensembler_dict.keys())
