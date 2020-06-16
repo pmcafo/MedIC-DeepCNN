@@ -35,4 +35,13 @@ from ensmic.ensemble.best_model import ELM_BestModel
 
 # Ensembler Dictionary
 ensembler_dict = {"BestModel":ELM_BestModel,
-                  "MeanUnweight
+                  "MeanUnweighted":ELM_MeanUnweighted,
+                  "MeanWeighted":ELM_MeanWeighted,
+                  "MajorityVoting_Hard":ELM_MajorityVote_Hard,
+                  "MajorityVoting_Soft":ELM_MajorityVote_Soft,
+                  "GlobalArgmax":ELM_GlobalArgmax,
+                  "DecisionTree":ELM_DecisionTree,
+                  "LogisticRegression":ELM_LogisticRegression,
+                  "k-NearestNeighbors":ELM_kNearestNeighbors,
+                  "NaiveBayes":ELM_NaiveBayes,
+                  "SupportVectorMachine":ELM_Suppo
