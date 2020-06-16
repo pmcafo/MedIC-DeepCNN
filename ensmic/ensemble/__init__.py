@@ -24,4 +24,15 @@ from ensmic.ensemble.majorityvote_hard import ELM_MajorityVote_Hard
 from ensmic.ensemble.majorityvote_soft import ELM_MajorityVote_Soft
 # Machine Learning Approaches
 from ensmic.ensemble.decision_tree import ELM_DecisionTree
-fro
+from ensmic.ensemble.logistic_regression import ELM_LogisticRegression
+from ensmic.ensemble.k_neighbors import ELM_kNearestNeighbors
+from ensmic.ensemble.naive_bayes import ELM_NaiveBayes
+from ensmic.ensemble.support_vector_machine import ELM_SupportVectorMachine
+from ensmic.ensemble.gaussian_process import ELM_GaussianProcess
+# Other Approaches
+from ensmic.ensemble.global_argmax import ELM_GlobalArgmax
+from ensmic.ensemble.best_model import ELM_BestModel
+
+# Ensembler Dictionary
+ensembler_dict = {"BestModel":ELM_BestModel,
+                  "MeanUnweight
