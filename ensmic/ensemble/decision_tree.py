@@ -1,3 +1,4 @@
+
 #==============================================================================#
 #  Author:       Dominik Müller                                                #
 #  Copyright:    2020 IT-Infrastructure for Translational Medical Research,    #
@@ -20,12 +21,16 @@
 #                   Library imports                   #
 #-----------------------------------------------------#
 # External libraries
-from abc import ABC, abstractmethod
+import numpy as np
+import pickle
+from sklearn.tree import DecisionTreeClassifier
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
 
 #-----------------------------------------------------#
-#      Abstract Interface for an Ensemble class       #
+#                 ELM: Decision Tree                  #
 #-----------------------------------------------------#
-""" An abstract base class for an Ensemble Learning Method.
+""" Ensemble Learning approach via Decision Tree.
 
 Methods:
     __init__                Initialize Ensemble Learning Method.
@@ -34,23 +39,44 @@ Methods:
     dump:                   Save (fitted) model to disk.
     load:                   Load (fitted) model from disk.
 """
-class Abstract_Ensemble(ABC):
-    @abstractmethod
+class ELM_DecisionTree(Abstract_Ensemble):
+    #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------#
     def __init__(self, n_classes):
-        pass
+        # Initialize model
+        self.model = DecisionTreeClassifier(random_state=0)
 
-    @abstractmethod
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
     def training(self, train_x, train_y):
-        pass
+        # Transform Y array to be NumPy 1D array
+        train_y = np.ravel(train_y, order="C")
+        # Fit model to val-ensemble
+        self.model = self.model.fit(train_x, train_y)
 
-    @abstractmethod
+    #---------------------------------------------#
+    #                  Prediction                 #
+    #---------------------------------------------#
     def prediction(self, data):
-        pass
+        # Compute prediction probabilities via fitted model
+        pred = self.model.predict_proba(data)
+        # Return results as NumPy array
+        return pred
 
-    @abstractmethod
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
     def dump(self, path):
-        pass
+        # Dump model to disk via pickle
+        with open(path, "wb") as pickle_writer:
+            pickle.dump(self.model, pickle_writer)
 
-    @abstractmethod
+    #---------------------------------------------#
+    #             Load Model from Disk            #
+    #---------------------------------------------#
     def load(self, path):
-        pass
+        # Load model from disk via pickle
+        with open(path, "rb") as pickle_reader:
+            self.model = pickle.load(pickle_reader)

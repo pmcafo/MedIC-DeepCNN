@@ -1,3 +1,4 @@
+
 #==============================================================================#
 #  Author:       Dominik Müller                                                #
 #  Copyright:    2020 IT-Infrastructure for Translational Medical Research,    #
@@ -20,12 +21,16 @@
 #                   Library imports                   #
 #-----------------------------------------------------#
 # External libraries
-from abc import ABC, abstractmethod
+import numpy as np
+import pickle
+from sklearn.gaussian_process import GaussianProcessClassifier
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
 
 #-----------------------------------------------------#
-#      Abstract Interface for an Ensemble class       #
+#                ELM: Gaussian Process                #
 #-----------------------------------------------------#
-""" An abstract base class for an Ensemble Learning Method.
+""" Ensemble Learning approach via Gaussian Process.
 
 Methods:
     __init__                Initialize Ensemble Learning Method.
@@ -34,23 +39,5 @@ Methods:
     dump:                   Save (fitted) model to disk.
     load:                   Load (fitted) model from disk.
 """
-class Abstract_Ensemble(ABC):
-    @abstractmethod
-    def __init__(self, n_classes):
-        pass
-
-    @abstractmethod
-    def training(self, train_x, train_y):
-        pass
-
-    @abstractmethod
-    def prediction(self, data):
-        pass
-
-    @abstractmethod
-    def dump(self, path):
-        pass
-
-    @abstractmethod
-    def load(self, path):
-        pass
+class ELM_GaussianProcess(Abstract_Ensemble):
+    #---------------------------------------------#
