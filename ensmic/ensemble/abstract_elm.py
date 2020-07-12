@@ -24,4 +24,16 @@ from abc import ABC, abstractmethod
 
 #-----------------------------------------------------#
 #      Abstract Interface for an Ensemble class       #
-#-------------------------------------------------
+#-----------------------------------------------------#
+""" An abstract base class for an Ensemble Learning Method.
+
+Methods:
+    __init__                Initialize Ensemble Learning Method.
+    training:               Fit Ensemble Learning Method on validate-ensemble.
+    prediction:             Utilize Ensemble Learning Method for test dataset.
+    dump:                   Save (fitted) model to disk.
+    load:                   Load (fitted) model from disk.
+"""
+class Abstract_Ensemble(ABC):
+    @abstractmethod
+    def __init__
