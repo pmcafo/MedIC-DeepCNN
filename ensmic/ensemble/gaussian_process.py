@@ -41,3 +41,43 @@ Methods:
 """
 class ELM_GaussianProcess(Abstract_Ensemble):
     #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------#
+    def __init__(self, n_classes):
+        # Initialize model
+        self.model = GaussianProcessClassifier(random_state=0,
+                                               multi_class="one_vs_rest")
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
+    def training(self, train_x, train_y):
+        # Transform Y array to be NumPy 1D array
+        train_y = np.ravel(train_y, order="C")
+        # Fit model to val-ensemble
+        self.model = self.model.fit(train_x, train_y)
+
+    #---------------------------------------------#
+    #                  Prediction                 #
+    #---------------------------------------------#
+    def prediction(self, data):
+        # Compute prediction probabilities via fitted model
+        pred = self.model.predict_proba(data)
+        # Return results as NumPy array
+        return pred
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
+    def dump(self, path):
+        # Dump model to disk via pickle
+        with open(path, "wb") as pickle_writer:
+            pickle.dump(self.model, pickle_writer)
+
+    #---------------------------------------------#
+    #             Load Model from Disk            #
+    #---------------------------------------------#
+    def load(self, path):
+        # Load model from disk via pickle
+        with open(path, "rb") as pickle_reader:
+            self.model = pickle.load(pickle_reader)
