@@ -41,4 +41,18 @@ class ELM_GlobalArgmax(Abstract_Ensemble):
     #---------------------------------------------#
     #                Initialization               #
     #---------------------------------------------#
-    def __init__
+    def __init__(self, n_classes):
+        # Store class variables
+        self.n_classes = n_classes
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
+    def training(self, train_x, train_y):
+        # No training required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #                  Prediction                 #
+    #---------------------------------------------#
+    def pred
