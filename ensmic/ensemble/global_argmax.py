@@ -17,4 +17,18 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
 #==============================================================================#
 #-----------------------------------------------------#
-#                   Libra
+#                   Library imports                   #
+#-----------------------------------------------------#
+# External libraries
+import numpy as np
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
+from ensmic.utils.metrics import safe_division
+
+#-----------------------------------------------------#
+#                  ELM: Global Argmax                 #
+#-----------------------------------------------------#
+""" Ensemble Learning approach via global argmax.
+
+Methods:
+    __init__                Initialize Ensemble Learni
