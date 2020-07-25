@@ -55,4 +55,15 @@ class ELM_GlobalArgmax(Abstract_Ensemble):
     #---------------------------------------------#
     #                  Prediction                 #
     #---------------------------------------------#
-    def pred
+    def prediction(self, data):
+        # Select global argmax for each sample
+        argmax_col = data.idxmax(axis=1)
+        argmax_prob = data.max(axis=1)
+        # Transform column argmax into correct class integer
+        pred_class = [int(p[-1]) for p in argmax_col]
+        # Create empty probability array
+        pred_prob = np.zeros(shape=(len(pred_class), self.n_classes))
+        # Fill probability array
+        for i, c in enumerate(pred_class):
+            # Copy argmax probability
+            pred_prob[i][c] 
