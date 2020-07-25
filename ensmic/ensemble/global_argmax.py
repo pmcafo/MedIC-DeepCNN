@@ -31,4 +31,14 @@ from ensmic.utils.metrics import safe_division
 """ Ensemble Learning approach via global argmax.
 
 Methods:
-    __init__                Initialize Ensemble Learni
+    __init__                Initialize Ensemble Learning Method.
+    training:               Fit Ensemble Learning Method on validate-ensemble.
+    prediction:             Utilize Ensemble Learning Method for test dataset.
+    dump:                   Save (fitted) model to disk.
+    load:                   Load (fitted) model from disk.
+"""
+class ELM_GlobalArgmax(Abstract_Ensemble):
+    #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------#
+    def __init__
