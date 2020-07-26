@@ -66,4 +66,14 @@ class ELM_GlobalArgmax(Abstract_Ensemble):
         # Fill probability array
         for i, c in enumerate(pred_class):
             # Copy argmax probability
-            pred_prob[i][c] 
+            pred_prob[i][c] = argmax_prob[i]
+            # Compute equally distributed remaining probability for other classes
+            class_list = [(x) for x in range(0, self.n_classes) if x!=c]
+            prob_remaining = safe_division(1 - argmax_prob[i], self.n_classes-1)
+            for j in class_list: pred_prob[i][j] = prob_remaining
+        # Return predicted results
+        return pred_prob
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+ 
