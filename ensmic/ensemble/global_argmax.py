@@ -76,4 +76,14 @@ class ELM_GlobalArgmax(Abstract_Ensemble):
 
     #---------------------------------------------#
     #              Dump Model to Disk             #
- 
+    #---------------------------------------------#
+    def dump(self, path):
+        # No model infrastructure required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #             Load Model from Disk            #
+    #---------------------------------------------#
+    def load(self, path):
+        # No model infrastructure required for this method, therefore skip
+        pass
