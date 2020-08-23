@@ -18,4 +18,18 @@
 #==============================================================================#
 #-----------------------------------------------------#
 #                   Library imports                   #
-#--------------------------
+#-----------------------------------------------------#
+# External libraries
+import numpy as np
+import pickle
+from sklearn.neighbors import KNeighborsClassifier
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
+
+#-----------------------------------------------------#
+#               ELM: k-Nearest Neighbors              #
+#-----------------------------------------------------#
+""" Ensemble Learning approach via k-Nearest Neighbors.
+
+Methods:
+    __
