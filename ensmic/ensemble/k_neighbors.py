@@ -32,4 +32,13 @@ from ensmic.ensemble.abstract_elm import Abstract_Ensemble
 """ Ensemble Learning approach via k-Nearest Neighbors.
 
 Methods:
-    __
+    __init__                Initialize Ensemble Learning Method.
+    training:               Fit Ensemble Learning Method on validate-ensemble.
+    prediction:             Utilize Ensemble Learning Method for test dataset.
+    dump:                   Save (fitted) model to disk.
+    load:                   Load (fitted) model from disk.
+"""
+class ELM_kNearestNeighbors(Abstract_Ensemble):
+    #---------------------------------------------#
+    #                Initialization               #
+    #-----
