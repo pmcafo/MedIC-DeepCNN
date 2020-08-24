@@ -41,4 +41,15 @@ Methods:
 class ELM_kNearestNeighbors(Abstract_Ensemble):
     #---------------------------------------------#
     #                Initialization               #
-    #-----
+    #---------------------------------------------#
+    def __init__(self, n_classes):
+        # Initialize model
+        self.model = KNeighborsClassifier(n_neighbors=5)
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
+    def training(self, train_x, train_y):
+        # Transform Y array to be NumPy 1D array
+        train_y = np.ravel(train_y, order="C")
+        # Fit model to val-ens
