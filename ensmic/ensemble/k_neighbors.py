@@ -52,4 +52,18 @@ class ELM_kNearestNeighbors(Abstract_Ensemble):
     def training(self, train_x, train_y):
         # Transform Y array to be NumPy 1D array
         train_y = np.ravel(train_y, order="C")
-        # Fit model to val-ens
+        # Fit model to val-ensemble
+        self.model = self.model.fit(train_x, train_y)
+
+    #---------------------------------------------#
+    #                  Prediction                 #
+    #---------------------------------------------#
+    def prediction(self, data):
+        # Compute prediction probabilities via fitted model
+        pred = self.model.predict_proba(data)
+        # Return results as NumPy array
+        return pred
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #------------
