@@ -66,4 +66,16 @@ class ELM_kNearestNeighbors(Abstract_Ensemble):
 
     #---------------------------------------------#
     #              Dump Model to Disk             #
-    #------------
+    #---------------------------------------------#
+    def dump(self, path):
+        # Dump model to disk via pickle
+        with open(path, "wb") as pickle_writer:
+            pickle.dump(self.model, pickle_writer)
+
+    #---------------------------------------------#
+    #             Load Model from Disk            #
+    #---------------------------------------------#
+    def load(self, path):
+        # Load model from disk via pickle
+        with open(path, "rb") as pickle_reader:
+            self.model = pickle.load(pickle_reader)
