@@ -30,4 +30,14 @@ from ensmic.ensemble.abstract_elm import Abstract_Ensemble
 """ Ensemble Learning approach via Hard Majority Vote.
 
 Methods:
-    __ini
+    __init__                Initialize Ensemble Learning Method.
+    training:               Fit Ensemble Learning Method on validate-ensemble.
+    prediction:             Utilize Ensemble Learning Method for test dataset.
+    dump:                   Save (fitted) model to disk.
+    load:                   Load (fitted) model from disk.
+"""
+class ELM_MajorityVote_Hard(Abstract_Ensemble):
+    #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------#
+   
