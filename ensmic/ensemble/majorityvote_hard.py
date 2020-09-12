@@ -16,4 +16,18 @@
 #  You should have received a copy of the GNU General Public License           #
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
 #==============================================================================#
-#----------
+#-----------------------------------------------------#
+#                   Library imports                   #
+#-----------------------------------------------------#
+# External libraries
+import pandas as pd
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
+
+#-----------------------------------------------------#
+#              ELM: Majority Vote - Hard              #
+#-----------------------------------------------------#
+""" Ensemble Learning approach via Hard Majority Vote.
+
+Methods:
+    __ini
