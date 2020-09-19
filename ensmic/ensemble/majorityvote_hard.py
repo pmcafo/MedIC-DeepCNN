@@ -53,4 +53,12 @@ class ELM_MajorityVote_Hard(Abstract_Ensemble):
 
     #---------------------------------------------#
     #                  Prediction                 #
-    
+    #---------------------------------------------#
+    def prediction(self, data):
+        # Split data columns into multi level structure based on architecutre
+        data.columns = data.columns.str.split('_', expand=True)
+        # Identify argmax (vote) for each architecutre and cache n-architectures
+        data = data.groupby(level=0, axis=1).idxmax(axis=1)
+        n_architectures = len(data.columns)
+        data = data.apply(lambda entry: [tup[1] for tup in entry])
+        # Sum up votes of all arc
