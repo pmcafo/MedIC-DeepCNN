@@ -40,4 +40,17 @@ class ELM_MajorityVote_Hard(Abstract_Ensemble):
     #---------------------------------------------#
     #                Initialization               #
     #---------------------------------------------#
-   
+    def __init__(self, n_classes):
+        # No hyperparameter adjustment required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
+    def training(self, train_x, train_y):
+        # No training required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #                  Prediction                 #
+    
