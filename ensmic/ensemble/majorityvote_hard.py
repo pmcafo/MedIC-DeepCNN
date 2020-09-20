@@ -61,4 +61,18 @@ class ELM_MajorityVote_Hard(Abstract_Ensemble):
         data = data.groupby(level=0, axis=1).idxmax(axis=1)
         n_architectures = len(data.columns)
         data = data.apply(lambda entry: [tup[1] for tup in entry])
-        # Sum up votes of all arc
+        # Sum up votes of all architectures
+        data = data.apply(pd.Series.value_counts, axis=1).fillna(0)
+        # Compute Class Probabilities
+        pred = data.divide(n_architectures)
+        # Return prediction
+        return pred.to_numpy()
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
+    def dump(self, path):
+        # No model infrastructure required for this method, therefore skip
+        pass
+
+    #-----------
