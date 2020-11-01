@@ -25,4 +25,27 @@ import pandas as pd
 from ensmic.ensemble.abstract_elm import Abstract_Ensemble
 from ensmic.utils.softmax import softmax
 
-#------------------------------------------
+#-----------------------------------------------------#
+#              ELM: Majority Vote - Soft              #
+#-----------------------------------------------------#
+""" Ensemble Learning approach via Soft Majority Vote.
+
+Methods:
+    __init__                Initialize Ensemble Learning Method.
+    training:               Fit Ensemble Learning Method on validate-ensemble.
+    prediction:             Utilize Ensemble Learning Method for test dataset.
+    dump:                   Save (fitted) model to disk.
+    load:                   Load (fitted) model from disk.
+"""
+class ELM_MajorityVote_Soft(Abstract_Ensemble):
+    #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------#
+    def __init__(self, n_classes):
+        # No hyperparameter adjustment required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
+  
