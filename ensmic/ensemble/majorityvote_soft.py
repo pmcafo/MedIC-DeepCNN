@@ -59,4 +59,18 @@ class ELM_MajorityVote_Soft(Abstract_Ensemble):
         # Split data columns into multi level structure based on architecutre
         data.columns = data.columns.str.split('_', expand=True)
         # Sum up all predicted probabilities from all architecutres
-        data = data.gro
+        data = data.groupby(level=1, axis=1).sum()
+        # Compute softmax on probability sums
+        pred = data.apply(softmax, axis=1)
+        # Return prediction
+        return pred.to_numpy()
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
+    def dump(self, path):
+        # No model infrastructure required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #         
