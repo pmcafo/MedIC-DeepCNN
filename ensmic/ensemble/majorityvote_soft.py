@@ -73,4 +73,8 @@ class ELM_MajorityVote_Soft(Abstract_Ensemble):
         pass
 
     #---------------------------------------------#
-    #         
+    #             Load Model from Disk            #
+    #---------------------------------------------#
+    def load(self, path):
+        # No model infrastructure required for this method, therefore skip
+        pass
