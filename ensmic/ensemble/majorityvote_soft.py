@@ -48,4 +48,15 @@ class ELM_MajorityVote_Soft(Abstract_Ensemble):
     #---------------------------------------------#
     #                  Training                   #
     #---------------------------------------------#
-  
+    def training(self, train_x, train_y):
+        # No training required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #                  Prediction                 #
+    #---------------------------------------------#
+    def prediction(self, data):
+        # Split data columns into multi level structure based on architecutre
+        data.columns = data.columns.str.split('_', expand=True)
+        # Sum up all predicted probabilities from all architecutres
+        data = data.gro
