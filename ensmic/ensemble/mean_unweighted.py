@@ -58,4 +58,17 @@ class ELM_MeanUnweighted(Abstract_Ensemble):
         # Split data columns into multi level structure based on architecutre
         data.columns = data.columns.str.split('_', expand=True)
         # Compute average class probability (mean) across all architectures
-        pred = data.groupby
+        pred = data.groupby(level=1, axis=1).mean()
+        # Transform prediction to Numpy and return result
+        return pred.to_numpy()
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
+    def dump(self, path):
+        # No model infrastructure required for this method, therefore skip
+        pass
+
+    #---------------------------------------------#
+    #             Load Model from Disk            #
+    #----
