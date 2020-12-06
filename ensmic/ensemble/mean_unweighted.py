@@ -71,4 +71,7 @@ class ELM_MeanUnweighted(Abstract_Ensemble):
 
     #---------------------------------------------#
     #             Load Model from Disk            #
-    #----
+    #---------------------------------------------#
+    def load(self, path):
+        # No model infrastructure required for this method, therefore skip
+        pass
