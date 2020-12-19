@@ -15,4 +15,12 @@
 #                                                                              #
 #  You should have received a copy of the GNU General Public License           #
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
-#===
+#==============================================================================#
+#-----------------------------------------------------#
+#                   REFERENCE PAPER:                  #
+#                        2014.                        #
+#  Weighted convolutional  neural  network  ensemble. #
+#      Frazao,  Xavier,  and  Luis  A.  Alexandre.    #
+#      Congress on Pattern Recognition, Springer      #
+#-----------------------------------------------------#
+#          
