@@ -23,4 +23,17 @@
 #      Frazao,  Xavier,  and  Luis  A.  Alexandre.    #
 #      Congress on Pattern Recognition, Springer      #
 #-----------------------------------------------------#
-#          
+#                   Library imports                   #
+#-----------------------------------------------------#
+# External libraries
+import numpy as np
+import pandas as pd
+from sklearn.metrics import f1_score
+import pickle
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
+
+#-----------------------------------------------------#
+#                  ELM: Weighted Mean                 #
+#-----------------------------------------------------#
+""" Ensemble Learning approach via weighted M
