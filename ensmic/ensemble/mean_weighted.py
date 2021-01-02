@@ -47,4 +47,16 @@ Methods:
 """
 class ELM_MeanWeighted(Abstract_Ensemble):
     #---------------------------------------------#
-    #                Initializa
+    #                Initialization               #
+    #---------------------------------------------#
+    def __init__(self, n_classes):
+        # Initialize class variables
+        self.weights = None
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
+    def training(self, train_x, train_y):
+        # Split data columns into multi level structure based on architecutre
+        train_x.columns = train_x.columns.str.split('_', expand=True)
+  
