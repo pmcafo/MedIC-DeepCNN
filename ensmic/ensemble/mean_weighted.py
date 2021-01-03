@@ -59,4 +59,13 @@ class ELM_MeanWeighted(Abstract_Ensemble):
     def training(self, train_x, train_y):
         # Split data columns into multi level structure based on architecutre
         train_x.columns = train_x.columns.str.split('_', expand=True)
-  
+        # Identify prediction for each architecutre
+        data = train_x.groupby(level=0, axis=1).idxmax(axis=1)
+        data = data.apply(lambda entry: [tup[1][1] for tup in entry])
+        # Convert dataframe to integer
+        data = data.astype('int')
+        # Compute F1/weights for each architecture
+        predarch = data.to_dict(orient="list")
+        weights = []
+        for arch in predarch.keys():
+            arch_f1 = f1_score(predarch[arch], train_y, average="
