@@ -68,4 +68,15 @@ class ELM_MeanWeighted(Abstract_Ensemble):
         predarch = data.to_dict(orient="list")
         weights = []
         for arch in predarch.keys():
-            arch_f1 = f1_score(predarch[arch], train_y, average="
+            arch_f1 = f1_score(predarch[arch], train_y, average="macro")
+            weights.append(arch_f1)
+        # Store weights in cache
+        self.weights = weights
+
+    #---------------------------------------------#
+    #                  Prediction                 #
+    #---------------------------------------------#
+    def prediction(self, data):
+        # Split data columns into multi level structure based on architecutre
+        data.columns = data.columns.str.split('_', expand=True)
+        # Compute average class probability (mean) across al
