@@ -88,4 +88,18 @@ class ELM_MeanWeighted(Abstract_Ensemble):
         pred = pred.transpose().apply(pd.Series.explode)
         # Convert pandas dataframe to float64
         pred = pred.astype("float64")
-        # Transform prediction to Num
+        # Transform prediction to Numpy and return result
+        return pred.to_numpy()
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
+    def dump(self, path):
+        # Dump weights to disk via pickle
+        with open(path, "wb") as pickle_writer:
+            pickle.dump(self.weights, pickle_writer)
+
+    #---------------------------------------------#
+    #             Load Model from Disk            #
+    #---------------------------------------------#
+   
