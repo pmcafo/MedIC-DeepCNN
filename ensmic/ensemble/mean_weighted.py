@@ -79,4 +79,13 @@ class ELM_MeanWeighted(Abstract_Ensemble):
     def prediction(self, data):
         # Split data columns into multi level structure based on architecutre
         data.columns = data.columns.str.split('_', expand=True)
-        # Compute average class probability (mean) across al
+        # Compute average class probability (mean) across all architectures
+        pred = data.groupby(level=1, axis=1).apply(np.average,
+                                                   axis=1,
+                                                   weights=self.weights)
+        # Transform prediction to Pandas and clean format
+        pred = pd.DataFrame(data=pred, columns=["index"])
+        pred = pred.transpose().apply(pd.Series.explode)
+        # Convert pandas dataframe to float64
+        pred = pred.astype("float64")
+        # Transform prediction to Num
