@@ -102,4 +102,7 @@ class ELM_MeanWeighted(Abstract_Ensemble):
     #---------------------------------------------#
     #             Load Model from Disk            #
     #---------------------------------------------#
-   
+    def load(self, path):
+        # Load weights from disk via pickle
+        with open(path, "rb") as pickle_reader:
+            self.weights = pickle.load(pickle_reader)
