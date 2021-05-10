@@ -14,4 +14,16 @@
 #  GNU General Public License for more details.                                #
 #                                                                              #
 #  You should have received a copy of the GNU General Public License           #
-#  along with this pr
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
+#==============================================================================#
+#-----------------------------------------------------#
+#                   Library imports                   #
+#-----------------------------------------------------#
+# External libraries
+import numpy as np
+import pickle
+from sklearn.naive_bayes import ComplementNB
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
+
+#-
