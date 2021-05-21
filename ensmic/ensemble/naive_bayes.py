@@ -36,4 +36,17 @@ Methods:
     training:               Fit Ensemble Learning Method on validate-ensemble.
     prediction:             Utilize Ensemble Learning Method for test dataset.
     dump:                   Save (fitted) model to disk.
-    load:        
+    load:                   Load (fitted) model from disk.
+"""
+class ELM_NaiveBayes(Abstract_Ensemble):
+    #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------#
+    def __init__(self, n_classes):
+        # Initialize model
+        self.model = ComplementNB()
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #---------------------------------------------#
+    def tr
