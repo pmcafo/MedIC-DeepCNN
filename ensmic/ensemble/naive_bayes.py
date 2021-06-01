@@ -60,4 +60,18 @@ class ELM_NaiveBayes(Abstract_Ensemble):
     #---------------------------------------------#
     def prediction(self, data):
         # Compute prediction probabilities via fitted model
-        pred = self.model.predict
+        pred = self.model.predict_proba(data)
+        # Return results as NumPy array
+        return pred
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
+    def dump(self, path):
+        # Dump model to disk via pickle
+        with open(path, "wb") as pickle_writer:
+            pickle.dump(self.model, pickle_writer)
+
+    #---------------------------------------------#
+    #             Load Model from Disk            #
+    #---------------
