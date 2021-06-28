@@ -74,4 +74,8 @@ class ELM_NaiveBayes(Abstract_Ensemble):
 
     #---------------------------------------------#
     #             Load Model from Disk            #
-    #---------------
+    #---------------------------------------------#
+    def load(self, path):
+        # Load model from disk via pickle
+        with open(path, "rb") as pickle_reader:
+            self.model = pickle.load(pickle_reader)
