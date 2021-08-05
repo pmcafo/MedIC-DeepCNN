@@ -14,4 +14,17 @@
 #  GNU General Public License for more details.                                #
 #                                                                              #
 #  You should have received a copy of the GNU General Public License           #
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
+#==============================================================================#
+#-----------------------------------------------------#
+#                   Library imports                   #
+#-----------------------------------------------------#
+# External libraries
+import numpy as np
+import pickle
+from sklearn.svm import SVC
+# Internal libraries/scripts
+from ensmic.ensemble.abstract_elm import Abstract_Ensemble
+
+#-----------------------------------------------------#
+#         
