@@ -27,4 +27,13 @@ from sklearn.svm import SVC
 from ensmic.ensemble.abstract_elm import Abstract_Ensemble
 
 #-----------------------------------------------------#
-#         
+#             ELM: Support Vector Machine             #
+#-----------------------------------------------------#
+""" Ensemble Learning approach via Support Vector Machine.
+
+Methods:
+    __init__                Initialize Ensemble Learning Method.
+    training:               Fit Ensemble Learning Method on validate-ensemble.
+    prediction:             Utilize Ensemble Learning Method for test dataset.
+    dump:                   Save (fitted) model to disk.
+    load:                   Load (fitted) model
