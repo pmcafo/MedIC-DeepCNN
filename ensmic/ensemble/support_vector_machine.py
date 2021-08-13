@@ -36,4 +36,18 @@ Methods:
     training:               Fit Ensemble Learning Method on validate-ensemble.
     prediction:             Utilize Ensemble Learning Method for test dataset.
     dump:                   Save (fitted) model to disk.
-    load:                   Load (fitted) model
+    load:                   Load (fitted) model from disk.
+"""
+class ELM_SupportVectorMachine(Abstract_Ensemble):
+    #---------------------------------------------#
+    #                Initialization               #
+    #---------------------------------------------#
+    def __init__(self, n_classes):
+        # Initialize model
+        self.model = SVC(random_state=0,
+                         probability=True,
+                         gamma="scale")
+
+    #---------------------------------------------#
+    #                  Training                   #
+    #----
