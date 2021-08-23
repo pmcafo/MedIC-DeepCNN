@@ -50,4 +50,15 @@ class ELM_SupportVectorMachine(Abstract_Ensemble):
 
     #---------------------------------------------#
     #                  Training                   #
-    #----
+    #---------------------------------------------#
+    def training(self, train_x, train_y):
+        # Transform Y array to be NumPy 1D array
+        train_y = np.ravel(train_y, order="C")
+        # Fit model to val-ensemble
+        self.model = self.model.fit(train_x, train_y)
+
+    #---------------------------------------------#
+    #                  Prediction                 #
+    #---------------------------------------------#
+    def prediction(self, data):
+        # Compute predic
