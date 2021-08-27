@@ -75,4 +75,9 @@ class ELM_SupportVectorMachine(Abstract_Ensemble):
             pickle.dump(self.model, pickle_writer)
 
     #---------------------------------------------#
-    #             Load 
+    #             Load Model from Disk            #
+    #---------------------------------------------#
+    def load(self, path):
+        # Load model from disk via pickle
+        with open(path, "rb") as pickle_reader:
+            self.model = pickle.load(pickle_reader)
