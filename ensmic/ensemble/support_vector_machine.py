@@ -61,4 +61,18 @@ class ELM_SupportVectorMachine(Abstract_Ensemble):
     #                  Prediction                 #
     #---------------------------------------------#
     def prediction(self, data):
-        # Compute predic
+        # Compute prediction probabilities via fitted model
+        pred = self.model.predict_proba(data)
+        # Return results as NumPy array
+        return pred
+
+    #---------------------------------------------#
+    #              Dump Model to Disk             #
+    #---------------------------------------------#
+    def dump(self, path):
+        # Dump model to disk via pickle
+        with open(path, "wb") as pickle_writer:
+            pickle.dump(self.model, pickle_writer)
+
+    #---------------------------------------------#
+    #             Load 
