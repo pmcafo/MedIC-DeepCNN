@@ -23,4 +23,13 @@ dt$phase <- sapply(dt$phase, str_to_title)
 dt_proc <- dt[, .(min=min(Accuracy), max=max(Accuracy)), by=list(phase, dataset)]
 
 # Order labels
-dt_proc$phase <- factor(dt_proc$phase, levels=c("Baseline", "Augmenting", "Bagging", 
+dt_proc$phase <- factor(dt_proc$phase, levels=c("Baseline", "Augmenting", "Bagging", "Stacking"))
+dt$phase <- factor(dt$phase, levels=c("Baseline", "Augmenting", "Bagging", "Stacking"))
+dt_proc$dataset <- factor(dt_proc$dataset, levels=c("CHMNIST", "COVID", "ISIC", "DRD"))
+dt$dataset <- factor(dt$dataset, levels=c("CHMNIST", "COVID", "ISIC", "DRD"))
+
+# Plot comparison
+dodge <- position_dodge(width=0.8)
+plot_comparison <- ggplot(dt_proc, aes(x=dataset, y=max, fill=phase)) +
+  geom_bar(stat="identity", position=dodge, color="black", width=0.4, alpha=0.4) +
+  stat_boxplot(data=dt, aes(x=dataset, 
