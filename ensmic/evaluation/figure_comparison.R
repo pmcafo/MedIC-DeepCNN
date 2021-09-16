@@ -32,4 +32,14 @@ dt$dataset <- factor(dt$dataset, levels=c("CHMNIST", "COVID", "ISIC", "DRD"))
 dodge <- position_dodge(width=0.8)
 plot_comparison <- ggplot(dt_proc, aes(x=dataset, y=max, fill=phase)) +
   geom_bar(stat="identity", position=dodge, color="black", width=0.4, alpha=0.4) +
-  stat_boxplot(data=dt, aes(x=dataset, 
+  stat_boxplot(data=dt, aes(x=dataset, y=F1), position=dodge, geom="errorbar") +
+  geom_boxplot(data=dt, aes(x=dataset, y=F1), position=dodge, outlier.shape=NA) +
+  geom_text(aes(y=0, label=phase), position=dodge, hjust=-0.2, vjust=0.4, angle=90) +
+  scale_fill_brewer(palette="Set1") +
+  scale_y_continuous(breaks=seq(0, 1, 0.05), limits=c(0, 1)) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  xlab("") +
+  ylab("Score (Accuracy / F1)") +
+  ggtitle("Comparison of Ensemble Learning Performance Influence on multiple datasets")
+png(file.path(path_eval, "figure.comparison.png"), 
