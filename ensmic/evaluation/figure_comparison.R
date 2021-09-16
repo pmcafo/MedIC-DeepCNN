@@ -42,4 +42,14 @@ plot_comparison <- ggplot(dt_proc, aes(x=dataset, y=max, fill=phase)) +
   xlab("") +
   ylab("Score (Accuracy / F1)") +
   ggtitle("Comparison of Ensemble Learning Performance Influence on multiple datasets")
-png(file.path(path_eval, "figure.comparison.png"), 
+png(file.path(path_eval, "figure.comparison.png"), width=2000, height=800, res=180)
+plot_comparison
+dev.off()
+
+# Compute performance gain for Accuracy
+r_datasets <- dt_proc$dataset[1:4]
+r_stacking <- ((dt_proc[phase=="Stacking"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
+r_bagging <- ((dt_proc[phase=="Bagging"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
+r_augmenting <- ((dt_proc[phase=="Augmenting"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
+
+dt_gain <- data.table(dataset=r_datasets, augmenting=r_augmenting, bagging=r_bagging, stacking=r_stacki
