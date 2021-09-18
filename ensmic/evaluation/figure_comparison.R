@@ -52,4 +52,15 @@ r_stacking <- ((dt_proc[phase=="Stacking"]$max / dt_proc[phase=="Baseline"]$max)
 r_bagging <- ((dt_proc[phase=="Bagging"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
 r_augmenting <- ((dt_proc[phase=="Augmenting"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
 
-dt_gain <- data.table(dataset=r_datasets, augmenting=r_augmenting, bagging=r_bagging, stacking=r_stacki
+dt_gain <- data.table(dataset=r_datasets, augmenting=r_augmenting, bagging=r_bagging, stacking=r_stacking)
+dt_gain <- melt(dt_gain, id.vars="dataset", measure.vars=c("augmenting", "bagging", "stacking"), 
+                variable.name="phase", value.name="gain")
+
+# Plot gain for Accuracy
+plot_gain_acc <- ggplot(dt_gain, aes(x=dataset, y=gain, fill=phase)) +
+  geom_bar(stat="identity", position="dodge", color="black", width=0.4, alpha=0.4) +
+  scale_y_continuous(breaks=seq(-10, 10, 1), limits=c(-10, +10)) +
+  scale_fill_manual(values=c("#377EB8", "#4DAF4A", "#984EA3")) + 
+  coord_flip() +
+  theme_bw() +
+  theme(legend.
