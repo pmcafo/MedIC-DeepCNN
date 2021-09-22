@@ -73,4 +73,11 @@ dt_proc <- dt[, .(min=min(F1), max=max(F1)), by=list(phase, dataset)]
 dt_proc$phase <- factor(dt_proc$phase, levels=c("Baseline", "Augmenting", "Bagging", "Stacking"))
 dt$phase <- factor(dt$phase, levels=c("Baseline", "Augmenting", "Bagging", "Stacking"))
 dt_proc$dataset <- factor(dt_proc$dataset, levels=c("CHMNIST", "COVID", "ISIC", "DRD"))
-dt$dataset <- factor(dt$d
+dt$dataset <- factor(dt$dataset, levels=c("CHMNIST", "COVID", "ISIC", "DRD"))
+r_datasets <- dt_proc$dataset[1:4]
+r_stacking <- ((dt_proc[phase=="Stacking"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
+r_bagging <- ((dt_proc[phase=="Bagging"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
+r_augmenting <- ((dt_proc[phase=="Augmenting"]$max / dt_proc[phase=="Baseline"]$max)-1) * 100
+
+dt_gain <- data.table(dataset=r_datasets, augmenting=r_augmenting, bagging=r_bagging, stacking=r_stacking)
+dt_gain <- melt(dt_gain, id.vars="dataset", measur
