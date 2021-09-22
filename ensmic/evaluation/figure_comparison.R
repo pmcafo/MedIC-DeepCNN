@@ -63,4 +63,14 @@ plot_gain_acc <- ggplot(dt_gain, aes(x=dataset, y=gain, fill=phase)) +
   scale_fill_manual(values=c("#377EB8", "#4DAF4A", "#984EA3")) + 
   coord_flip() +
   theme_bw() +
-  theme(legend.
+  theme(legend.position = "none") +
+  xlab("") +
+  ylab("Performance Gain in %") +
+  ggtitle("Accuracy Gain compared to Baseline")
+
+# Compute performance gain for F1
+dt_proc <- dt[, .(min=min(F1), max=max(F1)), by=list(phase, dataset)]
+dt_proc$phase <- factor(dt_proc$phase, levels=c("Baseline", "Augmenting", "Bagging", "Stacking"))
+dt$phase <- factor(dt$phase, levels=c("Baseline", "Augmenting", "Bagging", "Stacking"))
+dt_proc$dataset <- factor(dt_proc$dataset, levels=c("CHMNIST", "COVID", "ISIC", "DRD"))
+dt$dataset <- factor(dt$d
