@@ -92,3 +92,18 @@ plot_gain_f1 <- ggplot(dt_gain, aes(x=dataset, y=gain, fill=phase)) +
   theme_bw() +
   theme(legend.position = "none") +
   xlab("") +
+  ylab("Performance Gain in %") +
+  ggtitle("F1 Gain compared to Baseline")
+
+###########################################################################################
+
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+  
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+  
+  numPlots = length(plots)
+  
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout))
