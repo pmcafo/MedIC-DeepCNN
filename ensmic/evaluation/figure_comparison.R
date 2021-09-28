@@ -136,4 +136,19 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 ###########################################################################################
 
 png(file.path(path_eval, "figure.comparison.big.png"), width=2000, height=800, res=170)
-multiplot(p
+multiplot(plot_comparison, plot_gain_f1, layout=matrix(c(1,1,2), nrow=1, ncol=3, byrow=TRUE))
+dev.off()
+
+
+png(file.path(path_eval, "figure.comparison.final.png"), width=2200, height=1000, res=170)
+multiplot(plot_comparison, plot_gain_f1, plot_gain_acc, layout=matrix(c(1,1,2,1,1,3), nrow=2, ncol=3, byrow=TRUE))
+dev.off()
+
+
+
+
+
+
+
+
+
