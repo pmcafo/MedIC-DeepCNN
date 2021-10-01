@@ -29,7 +29,7 @@ import numpy as np
 from plotnine import *
 # Internal libraries/scripts
 from ensmic.data_loading import IO_Inference
-from ensmic.utils.metrics import compute_rawCM
+from ensmic.utils.metrics import compute_metrics, compute_rawCM
 
 #-----------------------------------------------------#
 #                    Configurations                   #
@@ -42,10 +42,11 @@ datasets = ["chmnist", "covid", "isic", "drd"]
 #-----------------------------------------------------#
 #                     Gather Data                     #
 #-----------------------------------------------------#
-cols = ["pd", "gt", "score", "dataset", "phase"]
-df_results = pd.DataFrame(data=[], columns=cols)
 # Iterate over phases
 for phase in phases:
+    result_set = []
+    result_method = []
+    result_all = []
     # Iterate over each dataset
     for ds in datasets:
         # Load ground truth dictionary
@@ -59,12 +60,23 @@ for phase in phases:
         if phase != "bagging":
             data = pd.read_csv(os.path.join(path_current, "evaluation",
                                             "results.test.averaged.csv"))
+            data_std = pd.read_csv(os.path.join(path_current, "evaluation",
+                                                "results.test.std.csv"))
             if phase == "stacking":
                 data.rename(columns={"ensembler": "method"}, inplace=True)
-            else : data.rename(columns={"architecture": "method"}, inplace=True)
+                data_std.rename(columns={"ensembler": "method"}, inplace=True)
+            else:
+                data.rename(columns={"architecture": "method"}, inplace=True)
+                data_std.rename(columns={"architecture": "method"}, inplace=True)
+            data_std.rename(columns={"value": "std"}, inplace=True)
+            data = pd.merge(data, data_std, on=["method", "metric"])
+            data["std"] = np.where(data["std"] >= data["value"],
+                                   data["value"],
+                                   data["std"])
             data_f1 = data[data["metric"] == "F1"]
             best_dt = data_f1.iloc[data_f1["value"].argmax()]
             best_method = best_dt["method"]
+            cached_data = data
         # For bagging: Identify best architecture & best method
         else:
             # iterate over all architectures
@@ -74,8 +86,16 @@ for phase in phases:
                 # Load results
                 data = pd.read_csv(os.path.join(path_current, walk, "evaluation",
                                                 "results.test.averaged.csv"))
+                data_std = pd.read_csv(os.path.join(path_current, walk, "evaluation",
+                                                    "results.test.std.csv"))
                 # Obtain best
                 data.rename(columns={"ensembler": "method"}, inplace=True)
+                data_std.rename(columns={"ensembler": "method"}, inplace=True)
+                data_std.rename(columns={"value": "std"}, inplace=True)
+                data = pd.merge(data, data_std, on=["method", "metric"])
+                data["std"] = np.where(data["std"] >= data["value"],
+                                       data["value"],
+                                       data["std"])
                 data_f1 = data[data["metric"] == "F1"]
                 curr_dt = data_f1.iloc[data_f1["value"].argmax()]
                 score = curr_dt["value"]
@@ -84,6 +104,8 @@ for phase in phases:
                     best_score = score
                     best_architecture = walk
                     best_method = curr_dt["method"]
+                    cached_data = data
+            print(best_architecture, best_method, best_score)
             # update path_current with best architecture
             path_current = os.path.join(path_current, best_architecture)
 
@@ -114,48 +136,50 @@ for phase in phases:
             pd_prob.append(prediction)
 
         #----------------------------#
-        #         CM Analysis        #
+        #        ROC Analysis        #
         #----------------------------#
-        # Compute confusion matrix
-        rawcm_np = compute_rawCM(gt, pd_class, class_list)
-        rawcm = pd.DataFrame(rawcm_np)
-        # Tidy dataframe
-        rawcm.index = class_list
-        rawcm.columns = class_list
-        # Preprocess dataframe
-        dt = rawcm.div(rawcm.sum(axis=0), axis=1) * 100
-        dt = dt.round(decimals=2)
-        dt.reset_index(drop=False, inplace=True)
-        dt = dt.melt(id_vars=["index"], var_name="gt", value_name="score")
-        dt.rename(columns={"index": "pd"}, inplace=True)
-        # Add meta information
-        dt["dataset"] = ds
-        dt["phase"] = phase
-        # Append to final dataframe
-        df_results = df_results.append(dt, ignore_index=True)
+        metrics = compute_metrics(gt, pd_class, pd_prob, class_list)
+        # Parse metrics to Pandas dataframe
+        metrics_tidy = pd.DataFrame.from_dict(metrics)
+        metrics_tidy = metrics_tidy[["ROC_FPR", "ROC_TPR"]]
+        metrics_tidy = metrics_tidy.transpose()
+        metrics_tidy.columns = class_list
 
-df_results["dataset"] = df_results["dataset"].str.upper()
-df_results["phase"] = df_results["phase"].str.capitalize()
+        # Cache dataframe
+        result_set.append(metrics_tidy)
+        result_method.append(best_method)
+        cached_data["dataset"] = ds
+        result_all.append(cached_data)
 
-# Store data
-path_res = os.path.join(path_results, "eval_tmp", "confusion_matrix.csv")
-df_results.to_csv(path_res, index=False)
-
-# # Plot figure
-# print(df_results)
-# fig = (ggplot(df_results[df_results["dataset"]=="chmnist"], aes("pd", "gt", fill="score"))
-#               + geom_tile()
-#               + geom_text(aes("pd", "gt", label="score"), color="black", size=24)
-#               + facet_wrap("~ phase")
-#               + ggtitle("Dataset: " + "CHMNIST")
-#               + xlab("Prediction")
-#               + ylab("Ground Truth")
-#               + scale_fill_gradient(low="white", high="royalblue", limits=[0, 100])
-#               + theme_bw(base_size=24)
-#               + theme(legend_position="none")
-#               + theme(axis_text_x = element_text(angle = 45, vjust = 1, hjust = 1)))
-# # # Store figure to disk
-# # path_arch = os.path.join(config["path_results"], "phase_baseline" + "." + \
-# #                          config["seed"], architecture)
-# fig.save(filename="test.png",
-#          path=path_results, width=18, height=14, dpi=200)
+    cols = ["dataset", "method", "class", "FPR", "TPR"]
+    df_results = pd.DataFrame(data=[], dtype=np.float64, columns=cols)
+    # Iterate over dataset
+    for i in range(0, len(datasets)):
+        # Preprocess data into correct format
+        roc_df = result_set[i].copy()
+        roc_df = roc_df.transpose()
+        roc_df = roc_df[["ROC_FPR", "ROC_TPR"]]
+        roc_df = roc_df.apply(pd.Series.explode)
+        # Append to result dataframe
+        roc_df = roc_df.reset_index()
+        roc_df.rename(columns={"index":"class",
+                               "ROC_FPR":"FPR",
+                               "ROC_TPR":"TPR"},
+                      inplace=True)
+        roc_df["method"] = result_method[i]
+        roc_df["dataset"] = datasets[i]
+        # Reorder columns
+        roc_df = roc_df[cols]
+        # Convert from object to float
+        roc_df["FPR"] = roc_df["FPR"].astype(float)
+        roc_df["TPR"] = roc_df["TPR"].astype(float)
+        # Merge to global result dataframe
+        df_results = df_results.append(roc_df, ignore_index=True)
+    path_res_tmp = os.path.join(path_results, "eval_tmp")
+    if not os.path.exists(path_res_tmp) : os.mkdir(path_res_tmp)
+    # Store ROC data
+    path_res = os.path.join(path_res_tmp, phase + ".roc.csv")
+    df_results.to_csv(path_res, index=False)
+    # Store all data
+    path_res_all = os.path.join(path_res_tmp, phase + ".all.csv")
+    pd.concat(result_all).to_csv(path_res_all, index=False)
