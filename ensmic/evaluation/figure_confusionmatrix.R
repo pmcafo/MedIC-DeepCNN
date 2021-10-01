@@ -48,4 +48,17 @@ p3 <- p1 %+% dt_cut[[3]] %+% ggtitle(unique(dt$dataset)[3])
 p4 <- p1 %+% dt_cut[[4]] %+% ggtitle(unique(dt$dataset)[4])
 # Convert & adjust widths+heights
 g1 = ggplotGrob(p1)
-g2 = ggplotGrob(p2
+g2 = ggplotGrob(p2)
+g3 = ggplotGrob(p3)
+g4 = ggplotGrob(p4)
+g1$widths <- g4$widths
+g2$widths <- g4$widths
+g3$widths <- g4$widths
+g1$heights <- g4$heights
+g2$heights <- g4$heights
+g3$heights <- g4$heights
+
+title <- textGrob("Confusion Matrices of the best Methods for each Dataset & Phase\n", gp=gpar(fontsize=20,font=1))
+png(file.path(path_eval, paste("figure.cm.big.png", sep="")), width=3000, height=1000, res=120)
+grid.arrange(g1,g2,g3,g4, nrow=1, ncol=4, top=title)
+dev.off()
