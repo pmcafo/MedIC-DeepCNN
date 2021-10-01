@@ -21,4 +21,19 @@ dt <- fread(file.path(path_results, "eval_tmp", "confusion_matrix.csv"))
 # Preprocess
 dt$dataset <- paste("Dataset:", dt$dataset)
 dt <- transform(dt, dataset=factor(dataset, levels=c("Dataset: CHMNIST","Dataset: COVID",
-                                
+                                                     "Dataset: ISIC","Dataset: DRD")))
+dt$score <- round(dt$score, 1)
+dt <- transform(dt, phase=factor(phase, levels=c("Baseline", "Augmenting", "Bagging", "Stacking")))
+
+
+
+
+# Make template plot
+dt_cut <- split(dt, f=dt$dataset)
+p1 <- ggplot(dt_cut[[1]], aes(pd, gt, fill=score)) +
+  geom_tile() +
+  geom_text(aes(pd, gt, label=score), color="black", size=3) +  # size=24
+  facet_wrap(. ~ phase) +
+  xlab("Prediction") +
+  ylab("Ground Truth") +
+  scale_
