@@ -36,4 +36,16 @@ p1 <- ggplot(dt_cut[[1]], aes(pd, gt, fill=score)) +
   facet_wrap(. ~ phase) +
   xlab("Prediction") +
   ylab("Ground Truth") +
-  scale_
+  scale_fill_gradient(low="white", high="royalblue", limits=c(0, 100)) +
+  ggtitle(unique(dt$dataset)[1]) +
+  theme_bw() + # size=24
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  theme(legend.position="none")
+
+# Plot remaining ones
+p2 <- p1 %+% dt_cut[[2]] %+% ggtitle(unique(dt$dataset)[2])
+p3 <- p1 %+% dt_cut[[3]] %+% ggtitle(unique(dt$dataset)[3])
+p4 <- p1 %+% dt_cut[[4]] %+% ggtitle(unique(dt$dataset)[4])
+# Convert & adjust widths+heights
+g1 = ggplotGrob(p1)
+g2 = ggplotGrob(p2
