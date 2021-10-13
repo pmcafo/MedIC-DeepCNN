@@ -35,4 +35,15 @@ res_bagging = []
 
 #-----------------------------------------------------#
 #                     Gather Data                     #
-#---------------
+#-----------------------------------------------------#
+for i, phase in enumerate(phases):
+    for ds in datasets:
+        res_tmp = []
+        if phase == "baseline":
+            path_phase = os.path.join(path_results, "phase_" + phase + "." + ds)
+            files = os.listdir(path_phase)
+            for f in files:
+                if f.startswith("time_measurements") : continue
+                if f == "evaluation" : continue
+                path_log = os.path.join(path_phase, f, "logs.csv")
+              
