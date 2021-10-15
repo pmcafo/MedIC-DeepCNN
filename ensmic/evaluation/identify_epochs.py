@@ -46,4 +46,15 @@ for i, phase in enumerate(phases):
                 if f.startswith("time_measurements") : continue
                 if f == "evaluation" : continue
                 path_log = os.path.join(path_phase, f, "logs.csv")
+                log = pd.read_csv(path_log)
+                lines = len(log.index)
+                res_tmp.append(lines)
+            res_baseline.extend(res_tmp)
+        else:
+            path_phase = os.path.join(path_results, "phase_" + phase + "." + ds)
+            files = os.listdir(path_phase)
+            for arch in files:
+                if arch.startswith("time_measurements") : continue
+                for f in range(0, 5):
+                    path_log = os.path.join(path_phase, arch,  "cv_" + str(f), "logs.csv")
               
