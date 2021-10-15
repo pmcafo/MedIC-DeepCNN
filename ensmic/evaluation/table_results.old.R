@@ -17,4 +17,16 @@ for (i in seq(1,3)){
   dt <- data.table()
   
   for (j in seq(1,4)){
-    path_dir <-
+    path_dir <- file.path(path_results, paste("phase_", phases[i], ".", datasets[j], sep = "", collapse = NULL))
+    path_file <- file.path(path_dir, "evaluation", "results.test.averaged.csv")
+    dt_tmp <- fread(path_file)
+    dt_tmp[, dataset:=datasets[j]]
+    if("ensembler" %in% colnames(dt_tmp))
+    {
+      setnames(dt_tmp, "ensembler", "model")
+    }
+    if("architecture" %in% colnames(dt_tmp))
+    {
+      setnames(dt_tmp, "architecture", "model")
+    }
+    dt_tmp <- dt_tmp[metric %in% c("Accuracy", "F1", "Sensitivity", "Speci
