@@ -1,3 +1,4 @@
+
 #==============================================================================#
 #  Author:       Dominik Müller                                                #
 #  Copyright:    2021 IT-Infrastructure for Translational Medical Research,    #
@@ -21,47 +22,38 @@
 #-----------------------------------------------------#
 # External libraries
 import os
-import pandas as pd
-import numpy as np
+import json
 
 #-----------------------------------------------------#
 #                    Configurations                   #
 #-----------------------------------------------------#
 path_results = "results"
 datasets = ["isic", "chmnist", "covid", "drd"]
-phases = ["bagging", "baseline"]
-res_baseline = []
-res_bagging = []
-
+phases = ["augmenting", "bagging", "baseline", "stacking"]
+res = [0, 0, 0, 0]
 #-----------------------------------------------------#
 #                     Gather Data                     #
 #-----------------------------------------------------#
 for i, phase in enumerate(phases):
+    if phase == "augmenting":
+        print(phase, res[i])
+        continue
     for ds in datasets:
-        res_tmp = []
-        if phase == "baseline":
-            path_phase = os.path.join(path_results, "phase_" + phase + "." + ds)
-            files = os.listdir(path_phase)
-            for f in files:
-                if f.startswith("time_measurements") : continue
-                if f == "evaluation" : continue
-                path_log = os.path.join(path_phase, f, "logs.csv")
-                log = pd.read_csv(path_log)
-                lines = len(log.index)
-                res_tmp.append(lines)
-            res_baseline.extend(res_tmp)
+        if phase != "bagging":
+            path = os.path.join(path_results, "phase_" + phase + "." + ds,
+                                "time_measurements.json")
+            with open(path) as fjson:
+                cache = json.load(fjson)
+            res[i] += sum(cache.values())
         else:
-            path_phase = os.path.join(path_results, "phase_" + phase + "." + ds)
-            files = os.listdir(path_phase)
-            for arch in files:
-                if arch.startswith("time_measurements") : continue
-                for f in range(0, 5):
-                    path_log = os.path.join(path_phase, arch,  "cv_" + str(f), "logs.csv")
-                    log = pd.read_csv(path_log)
-                    lines = len(log.index)
-                    res_tmp.append(lines)
-            res_baseline.extend(res_tmp)
-        print(phase, ds, "-", "mean:", np.mean(res_tmp),
-                              "median:", np.median(res_tmp))
-#     print(phase, res[i])
-# print("in total:", sum(res))
+            path = os.path.join(path_results, "phase_" + phase + "." + ds)
+            files = os.listdir(path)
+            for f in files:
+                if f.startswith("time_measurements"):
+                    rp = os.path.join(path, f)
+                    with open(rp) as fjson:
+                        cache = json.load(fjson)
+                    res[i] += sum(cache.values())
+
+    print(phase, res[i])
+print("in total:", sum(res))
