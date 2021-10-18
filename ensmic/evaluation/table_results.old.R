@@ -29,4 +29,19 @@ for (i in seq(1,3)){
     {
       setnames(dt_tmp, "architecture", "model")
     }
-    dt_tmp <- dt_tmp[metric %in% c("Accuracy", "F1", "Sensitivity", "Speci
+    dt_tmp <- dt_tmp[metric %in% c("Accuracy", "F1", "Sensitivity", "Specificity", "ROC_AUC")]
+    dt <- rbind(dt, dt_tmp)
+  }
+  dt <- dcast(dt, dataset + model ~ metric)
+  dt <- dt %>% mutate_if(is.numeric, round, 2)
+  path_out <- file.path(path_eval, paste("table.results.", phases[i], ".csv", sep=""))
+  fwrite(dt, path_out)
+}
+
+# Gather results for bagging
+dt <- data.table()
+for (j in seq(1,4)){
+  path_dir <- file.path(path_results, paste("phase_", phases[4], ".", datasets[j], sep = "", collapse = NULL))
+  
+  # Identify highest performing architecture
+  max
