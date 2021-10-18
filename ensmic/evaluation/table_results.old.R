@@ -44,4 +44,22 @@ for (j in seq(1,4)){
   path_dir <- file.path(path_results, paste("phase_", phases[4], ".", datasets[j], sep = "", collapse = NULL))
   
   # Identify highest performing architecture
-  max
+  max_value <- 0
+  max_arch <- ""
+  for (path_arch in list.dirs(path_dir, recursive=FALSE)){
+    dt_tmp <- fread(file.path(path_arch, "evaluation", "results.test.averaged.csv"))
+    if(max(dt_tmp[metric=="F1"]$value) > max_value){
+      max_value <- max(dt_tmp[metric=="F1"]$value)
+      max_arch <- path_arch
+    }
+  }
+  
+  # Obtain results
+  dt_tmp <- fread(file.path(path_arch, "evaluation", "results.test.averaged.csv"))
+  dt_tmp[, dataset:=datasets[j]]
+  dt <- rbind(dt, dt_tmp)
+  
+  print(max_arch)
+  print(max_value)
+}
+dt <- dt[metric 
