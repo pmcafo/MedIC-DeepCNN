@@ -236,3 +236,204 @@ def plot_averaged_results(results, dataset, eval_path):
                       + ggtitle("Architecture Comparison by " + metric)
                       + xlab("Architectures")
                       + ylab(metric)
+                      + coord_flip()
+                      + scale_y_continuous(limits=[0, 1])
+                      + theme_bw(base_size=28))
+        # Store figure to disk
+        fig.save(filename="plot." + dataset + ".averaged." + metric + ".png",
+                 path=path_eval, width=18, height=14, dpi=200)
+    # Plot results together
+    fig = (ggplot(results, aes("architecture", "value"))
+               + geom_col(stat='identity', width=0.6,
+                          position = position_dodge(width=0.6),
+                          show_legend=False,
+                          color='#F6F6F6', fill="#0C475B")
+               + ggtitle("Architecture Comparisons")
+               + facet_wrap("metric", nrow=2)
+               + xlab("Architectures")
+               + ylab("Score")
+               + coord_flip()
+               + scale_y_continuous(limits=[0, 1])
+               + theme_bw(base_size=28))
+    # Store figure to disk
+    fig.save(filename="plot." + dataset + ".averaged.all.png",
+          path=path_eval, width=40, height=25, dpi=200, limitsize=False)
+
+#-----------------------------------------------------#
+#                     ROC Analysis                    #
+#-----------------------------------------------------#
+def preprocess_roc_data(results, valid_architectures):
+    # Initialize result dataframe
+    cols = ["architecture", "class", "FPR", "TPR"]
+    df_results = pandas.DataFrame(data=[], dtype=np.float64, columns=cols)
+    # Iterate over each architecture results
+    for i in range(0, len(valid_architectures)):
+        # Preprocess data into correct format
+        arch_df = result_set[i].copy()
+        arch_df = arch_df.transpose()
+        roc_df = arch_df[["ROC_FPR", "ROC_TPR"]]
+        roc_df = roc_df.apply(pandas.Series.explode)
+        roc_df["architecture"] = valid_architectures[i]
+        # Append to result dataframe
+        roc_df = roc_df.reset_index()
+        roc_df.rename(columns={"index":"class",
+                               "ROC_FPR":"FPR",
+                               "ROC_TPR":"TPR"},
+                      inplace=True)
+        # Reorder columns
+        roc_df = roc_df[cols]
+        # Convert from object to float
+        roc_df["FPR"] = roc_df["FPR"].astype(float)
+        roc_df["TPR"] = roc_df["TPR"].astype(float)
+        # Merge to global result dataframe
+        df_results = df_results.append(roc_df, ignore_index=True)
+    return df_results
+
+def plot_auroc_results(results, dataset, eval_path):
+    # Plot roc results via facet_wrap
+    fig = (ggplot(results, aes("FPR", "TPR", color="class"))
+               + geom_line(size=1.5)
+               + geom_abline(intercept=0, slope=1, color="black",
+                             linetype="dashed")
+               + ggtitle("Architecture Comparisons by ROC")
+               + facet_wrap("architecture", nrow=4)
+               + xlab("False Positive Rate")
+               + ylab("True Positive Rate")
+               + scale_x_continuous(limits=[0, 1])
+               + scale_y_continuous(limits=[0, 1])
+               + scale_color_discrete(name="Classification")
+               + theme_bw(base_size=28))
+    # Store figure to disk
+    fig.save(filename="plot." + dataset + ".ROC.individual.png",
+             path=path_eval, width=40, height=20, dpi=200, limitsize=False)
+
+    results = results.groupby(["architecture"]).apply(macro_average_roc)
+    results.reset_index(inplace=True, level=[0])
+
+    try:
+        # Plot roc results together
+        fig = (ggplot(results, aes("FPR", "TPR", color="architecture"))
+                + geom_smooth(method="loess", se=False, size=1.5)
+                + geom_abline(intercept=0, slope=1, color="black",
+                              linetype="dashed", size=1.5)
+                + ggtitle("Architecture Comparisons by ROC")
+                + xlab("False Positive Rate")
+                + ylab("True Positive Rate")
+                + scale_x_continuous(limits=[0, 1])
+                + scale_y_continuous(limits=[0, 1])
+                + scale_color_discrete(name="Architectures")
+                + theme_bw(base_size=40))
+        # Store figure to disk
+        fig.save(filename="plot." + dataset + ".ROC.together.png",
+              path=path_eval, width=30, height=20, dpi=200, limitsize=False)
+    except:
+        print("Skipped ROC-together figure for:", dataset)
+
+#-----------------------------------------------------#
+#                Fitting Curve Analysis               #
+#-----------------------------------------------------#
+def gather_fitting_data(config):
+    dt_list = []
+    # Gather fitting logs from each architecture
+    for architecture in architecture_list:
+        try:
+            # Get path to fitting logging for current architecture
+            path_arch = os.path.join(config["path_results"], "phase_augmenting" + "." + \
+                                     config["seed"], architecture)
+            path_trainlogs = os.path.join(path_arch, "logs.csv")
+            # Load CSV as dataframe
+            dt_trainlog = pandas.read_csv(path_trainlogs)
+            # Add current architecture to dataframe and add to datatable list
+            dt_trainlog["architecture"] = architecture
+            dt_list.append(dt_trainlog)
+        except:
+            print("Skipping architecture", architecture, "for fitting evaluation")
+    # Merge to global fitting dataframe
+    dt_fitting = pandas.concat(dt_list, ignore_index=True)
+    # Melt dataframe into correct format
+    dt_fitting_loss = dt_fitting.melt(id_vars=["architecture", "epoch"],
+                                      value_vars=["loss", "val_loss"],
+                                      var_name="Dataset",
+                                      value_name="score")
+    dt_fitting_accuracy = dt_fitting.melt(id_vars=["architecture", "epoch"],
+                                          value_vars=["categorical_accuracy",
+                                                    "val_categorical_accuracy"],
+                                          var_name="Dataset",
+                                          value_name="score")
+    # Return datatable
+    return dt_fitting_loss, dt_fitting_accuracy
+
+def plot_fitting(results, metric, eval_path, config):
+    if metric == "Loss Function":
+        limits = [0, 2]
+    else:
+        limits = [0, 1]
+    # Plot results
+    fig = (ggplot(results, aes("epoch", "score", color="factor(Dataset)"))
+               #+ geom_smooth(method="gpr", size=1)
+               + geom_line(size=1)
+               + ggtitle(config["seed"].upper() + \
+                         ": Fitting Curve during Training")
+               + facet_wrap("architecture", nrow=4, scales="free_x")
+               + xlab("Epoch")
+               + ylab(metric)
+               + scale_y_continuous(limits=limits)
+               + scale_colour_discrete(name="Dataset",
+                                       labels=["Training", "Validation"])
+               + theme_bw(base_size=28))
+    # Store figure to disk
+    fig.save(filename="plot.fitting_course." + metric + ".png",
+          path=path_eval, width=65, height=25, dpi=200, limitsize=False)
+
+#-----------------------------------------------------#
+#                    Run Evaluation                   #
+#-----------------------------------------------------#
+# Create evaluation subdirectory
+path_eval = os.path.join(config["path_results"], "phase_augmenting" + "." + \
+                         config["seed"], "evaluation")
+if not os.path.exists(path_eval) : os.mkdir(path_eval)
+
+# Run Evaluation for validation and test dataset
+for ds in ["val-ensemble", "test"]:
+    # Initialize result dataframe
+    result_set = []
+    verified_architectures = []
+
+    # Run Evaluation for all architectures
+    print("Run evaluation for dataset:", ds)
+    for architecture in architecture_list:
+        print("Run evaluation for Architecture:", architecture)
+        try:
+            # Preprocess ground truth and predictions
+            id, gt, pd, pd_prob = preprocessing(architecture, ds, config)
+            # Compute metrics
+            metrics = compute_metrics(gt, pd, pd_prob, config["class_list"])
+            # Backup results
+            metrics_df = parse_results(metrics, architecture, ds, config)
+            # Cache dataframe and add architecture to verification list
+            result_set.append(metrics_df)
+            verified_architectures.append(architecture)
+            # Compute and store raw Confusion Matrix
+            rawcm = calc_confusion_matrix(gt, pd, architecture, ds, config)
+            plot_confusion_matrix(rawcm, architecture, ds, config)
+        except:
+            print("Skipping Architecture", architecture, "due to Error.")
+
+    # Collect results
+    results_all = collect_results(result_set, verified_architectures, ds,
+                                  path_eval, config)
+    # Macro Average results
+    results_averaged = macro_averaging(results_all, ds, path_eval)
+
+    # Plot result figure
+    plot_categorical_results(results_all, ds, path_eval)
+    plot_averaged_results(results_averaged, ds, path_eval)
+
+    # Analyse ROC
+    results_roc = preprocess_roc_data(result_set, verified_architectures)
+    plot_auroc_results(results_roc, ds, path_eval)
+
+# # Analyse fitting curve loggings
+# dt_fitting_loss, dt_fitting_accuracy = gather_fitting_data(config)
+# plot_fitting(dt_fitting_loss, "Loss_Function", path_eval, config)
+# plot_fitting(dt_fitting_accuracy, "Categorical_Accuracy", path_eval, config)
