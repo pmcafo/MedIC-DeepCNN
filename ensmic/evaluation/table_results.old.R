@@ -62,4 +62,9 @@ for (j in seq(1,4)){
   print(max_arch)
   print(max_value)
 }
-dt <- dt[metric 
+dt <- dt[metric %in% c("Accuracy", "F1", "Sensitivity", "Specificity", "ROC_AUC")]
+setnames(dt, "ensembler", "model")
+dt <- dcast(dt, dataset + model ~ metric)
+dt <- dt %>% mutate_if(is.numeric, round, 2)
+path_out <- file.path(path_eval, paste("table.results.", phases[4], ".csv", sep=""))
+fwrite(dt, path_out)
