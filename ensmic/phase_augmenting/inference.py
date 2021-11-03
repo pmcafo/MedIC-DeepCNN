@@ -44,4 +44,23 @@ args = parser.parse_args()
 
 #-----------------------------------------------------#
 #                    Configurations                   #
-#----------
+#-----------------------------------------------------#
+# Initialize configuration dictionary
+config = {}
+# Path to data directory
+config["path_data"] = "data"
+# Path to result directory
+config["path_results"] = "results"
+# Seed (if training multiple runs)
+config["seed"] = args.seed
+
+# Preprocessor Configurations
+config["threads"] = 16
+config["batch_size"] = 32
+config["batch_queue_size"] = 16
+# Neural Network Configurations
+config["workers"] = 16
+
+# Adjust GPU configuration
+config["gpu_id"] = int(args.gpu)
+os.environ
