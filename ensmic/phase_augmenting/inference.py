@@ -35,4 +35,13 @@ from ensmic.data_loading import IO_Inference, load_sampling, architecture_list
 #-----------------------------------------------------#
 #                      Argparser                      #
 #-----------------------------------------------------#
-parser = argparse.ArgumentParser(description="Analysis of C
+parser = argparse.ArgumentParser(description="Analysis of COVID-19 Classification via Ensemble Learning")
+parser.add_argument("-m", "--modularity", help="Data modularity selection: ['covid', 'isic', 'chmnist', 'drd']",
+                    required=True, type=str, dest="seed")
+parser.add_argument("-g", "--gpu", help="GPU ID selection for multi cluster",
+                    required=False, type=int, dest="gpu", default=0)
+args = parser.parse_args()
+
+#-----------------------------------------------------#
+#                    Configurations                   #
+#----------
