@@ -63,4 +63,15 @@ config["workers"] = 16
 
 # Adjust GPU configuration
 config["gpu_id"] = int(args.gpu)
-os.environ
+os.environ["CUDA_VISIBLE_DEVICES"] = str(config["gpu_id"])
+
+#-----------------------------------------------------#
+#                   AUCMEDI Pipeline                  #
+#-----------------------------------------------------#
+def run_aucmedi(samples, dataset, architecture, config, best_model=True):
+    # Define Subfunctions
+    sf_list = [Padding(mode="square")]
+    # Set activation output to softmax for multi-class classification
+    activation_output = "softmax"
+
+    # Initi
