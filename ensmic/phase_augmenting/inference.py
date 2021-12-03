@@ -85,4 +85,14 @@ def run_aucmedi(samples, dataset, architecture, config, best_model=True):
                            batch_queue_size=config["batch_queue_size"],
                            activation_output=activation_output,
                            loss="categorical_crossentropy",
-                       
+                           pretrained_weights=True)
+
+    # Obtain standardization mode for current architecture
+    sf_standardize = supported_standardize_mode[architecture]
+
+    # Obtain trained model file
+    path_model = os.path.join(config["path_results"], "phase_baseline" + "." + \
+                              config["seed"], architecture)
+    if best_model : path_model = os.path.join(path_model, "model.best.hdf5")
+    else : path_model = os.path.join(path_model, "model.last.hdf5")
+    # Load trained model from
