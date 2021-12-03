@@ -95,4 +95,17 @@ def run_aucmedi(samples, dataset, architecture, config, best_model=True):
                               config["seed"], architecture)
     if best_model : path_model = os.path.join(path_model, "model.best.hdf5")
     else : path_model = os.path.join(path_model, "model.last.hdf5")
-    # Load trained model from
+    # Load trained model from disk
+    model.load(path_model)
+
+    # Get result subdirectory for current architecture
+    path_arch = os.path.join(config["path_phase"], architecture)
+    if not os.path.exists(path_arch) : os.mkdir(path_arch)
+
+    # Create an Inference IO Interface
+    path_inf = os.path.join(path_arch, "inference" + "." + dataset + ".json")
+    infIO = IO_Inference(config["class_names"], path=path_inf)
+
+    # Initialize Image Augmentation
+    aug = Image_Augmentation(flip=True, rotate=True, brightness=False, contrast=False,
+                             saturation=False, hu
