@@ -74,4 +74,15 @@ def run_aucmedi(samples, dataset, architecture, config, best_model=True):
     # Set activation output to softmax for multi-class classification
     activation_output = "softmax"
 
-    # Initi
+    # Initialize architecture
+    nn_arch = architecture_dict[architecture](channels=3)
+    # Define input shape
+    input_shape = nn_arch.input[:-1]
+
+    # Initialize model
+    model = Neural_Network(config["nclasses"], channels=3, architecture=nn_arch,
+                           workers=config["workers"], multiprocessing=False,
+                           batch_queue_size=config["batch_queue_size"],
+                           activation_output=activation_output,
+                           loss="categorical_crossentropy",
+                       
