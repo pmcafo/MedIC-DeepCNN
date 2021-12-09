@@ -117,4 +117,13 @@ def run_aucmedi(samples, dataset, architecture, config, best_model=True):
     preds = predict_augmenting(model, samples, config["path_images"],
                                n_cycles=15, img_aug=aug, aggregate="mean",
                                image_format=config["image_format"], seed=None,
-      
+                               batch_size=config["batch_size"],
+                               grayscale=False, subfunctions=sf_list,
+                               standardize_mode=sf_standardize,
+                               resize=input_shape, workers=config["threads"])
+    infIO.store_inference(samples, preds)
+
+#-----------------------------------------------------#
+#               Setup Data IO Interface               #
+#-----------------------------------------------------#
+# Load sampling from 
