@@ -108,4 +108,13 @@ def run_aucmedi(samples, dataset, architecture, config, best_model=True):
 
     # Initialize Image Augmentation
     aug = Image_Augmentation(flip=True, rotate=True, brightness=False, contrast=False,
-                             saturation=False, hu
+                             saturation=False, hue=False, scale=False, crop=False,
+                             grid_distortion=False, compression=False, gamma=False,
+                             gaussian_noise=False, gaussian_blur=False,
+                             downscaling=False, elastic_transform=False)
+
+    # Compute predictions & store them to disk
+    preds = predict_augmenting(model, samples, config["path_images"],
+                               n_cycles=15, img_aug=aug, aggregate="mean",
+                               image_format=config["image_format"], seed=None,
+      
