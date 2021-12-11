@@ -139,4 +139,15 @@ sampling_test = load_sampling(path_input=config["path_data"],
 # Parse information to config
 config["nclasses"] = nclasses
 config["class_names"] = class_names
-config["image_format"
+config["image_format"] = image_format
+config["path_images"] = os.path.join(config["path_data"],
+                                     config["seed"] + ".images")
+
+# Create subdirectories for phase & seed
+config["path_phase"] = os.path.join(config["path_results"], "phase_augmenting" + "." + \
+                                    str(config["seed"]))
+if not os.path.exists(config["path_phase"]) : os.mkdir(config["path_phase"])
+
+#-----------------------------------------------------#
+#                     Main Runner                     #
+#-----
