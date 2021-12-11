@@ -126,4 +126,17 @@ def run_aucmedi(samples, dataset, architecture, config, best_model=True):
 #-----------------------------------------------------#
 #               Setup Data IO Interface               #
 #-----------------------------------------------------#
-# Load sampling from 
+# Load sampling from disk
+sampling_val = load_sampling(path_input=config["path_data"],
+                             subset="val-ensemble",
+                             seed=config["seed"])
+(x_val, _, nclasses, class_names, image_format) = sampling_val
+sampling_test = load_sampling(path_input=config["path_data"],
+                              subset="test",
+                              seed=config["seed"])
+(x_test, _, _, _, _) = sampling_test
+
+# Parse information to config
+config["nclasses"] = nclasses
+config["class_names"] = class_names
+config["image_format"
