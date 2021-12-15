@@ -150,4 +150,14 @@ if not os.path.exists(config["path_phase"]) : os.mkdir(config["path_phase"])
 
 #-----------------------------------------------------#
 #                     Main Runner                     #
-#-----
+#-----------------------------------------------------#
+# Run Inference for all architectures
+for architecture in architecture_list:
+    print("Run inference for Architecture:", architecture)
+    try:
+        # Run AUCMEDI pipeline for validation set
+        run_aucmedi(x_val, "val-ensemble", architecture, config, best_model=True)
+        # Run AUCMEDI pipeline for testing set
+        run_aucmedi(x_test, "test", architecture, config, best_model=True)
+        print("Finished inference for Architecture:", architecture)
+    except 
