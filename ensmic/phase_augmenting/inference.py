@@ -160,4 +160,5 @@ for architecture in architecture_list:
         # Run AUCMEDI pipeline for testing set
         run_aucmedi(x_test, "test", architecture, config, best_model=True)
         print("Finished inference for Architecture:", architecture)
-    except 
+    except Exception as e:
+        print(architecture, "-", "An exception occurred:", str(e))
