@@ -261,3 +261,73 @@ for architecture in architecture_list:
                + coord_flip()
                + scale_y_continuous(limits=[0, 1])
                + theme_bw(base_size=28))
+    # Store figure to disk
+    fig.save(filename="plot.averaged.all.png",
+          path=path_eval, width=40, height=25, dpi=200, limitsize=False)
+
+    #-----------------------------------------------------#
+    #                     ROC Analysis                    #
+    #-----------------------------------------------------#
+    # Initialize result dataframe
+    cols = ["ensembler", "class", "FPR", "TPR"]
+    results_roc = pandas.DataFrame(data=[], dtype=np.float64, columns=cols)
+    # Iterate over each ensembler results
+    for i in range(0, len(verified_ensembler)):
+        # Preprocess data into correct format
+        ens_df = result_set[i].copy()
+        ens_df = ens_df.transpose()
+        roc_df = ens_df[["ROC_FPR", "ROC_TPR"]]
+        roc_df = roc_df.apply(pandas.Series.explode)
+        roc_df["ensembler"] = verified_ensembler[i]
+        # Append to result dataframe
+        roc_df = roc_df.reset_index()
+        roc_df.rename(columns={"index":"class",
+                               "ROC_FPR":"FPR",
+                               "ROC_TPR":"TPR"},
+                      inplace=True)
+        # Reorder columns
+        roc_df = roc_df[cols]
+        # Convert from object to float
+        roc_df["FPR"] = roc_df["FPR"].astype(float)
+        roc_df["TPR"] = roc_df["TPR"].astype(float)
+        # Merge to global result dataframe
+        results_roc = results_roc.append(roc_df, ignore_index=True)
+
+    # Plot roc results via facet_wrap
+    fig = (ggplot(results_roc, aes("FPR", "TPR", color="class"))
+               + geom_line(size=1.5)
+               + geom_abline(intercept=0, slope=1, color="black",
+                             linetype="dashed")
+               + ggtitle("Ensemble Learning Comparisons by ROC")
+               + facet_wrap("ensembler", nrow=3)
+               + xlab("False Positive Rate")
+               + ylab("True Positive Rate")
+               + scale_x_continuous(limits=[0, 1])
+               + scale_y_continuous(limits=[0, 1])
+               + scale_color_discrete(name="Classification")
+               + theme_bw(base_size=28))
+    # Store figure to disk
+    fig.save(filename="plot.ROC.individual.png",
+             path=path_eval, width=40, height=20, dpi=200, limitsize=False)
+
+    results_roc = results_roc.groupby(["ensembler"]).apply(macro_average_roc)
+    results_roc.reset_index(inplace=True, level=[0])
+
+    # Plot roc results together
+    try:
+        fig = (ggplot(results_roc, aes("FPR", "TPR", color="ensembler"))
+                + geom_smooth(method="loess", se=False, size=1.5, span=0.7)
+                + geom_abline(intercept=0, slope=1, color="black",
+                              linetype="dashed", size=1.5)
+                + ggtitle("Ensemble Learning Comparisons by ROC")
+                + xlab("False Positive Rate")
+                + ylab("True Positive Rate")
+                + scale_x_continuous(limits=[0, 1])
+                + scale_y_continuous(limits=[0, 1])
+                + scale_color_discrete(name="Ensemble LearningTechnique")
+                + theme_bw(base_size=40))
+        # Store figure to disk
+        fig.save(filename="plot.ROC.together.png",
+              path=path_eval, width=30, height=20, dpi=200, limitsize=False)
+    except:
+        print("ROC-Together plot was not be able to created!")
