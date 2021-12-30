@@ -17,4 +17,18 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
 #==============================================================================#
 #-----------------------------------------------------#
-#                   Lib
+#                   Library imports                   #
+#-----------------------------------------------------#
+# External libraries
+import argparse
+import os
+import numpy as np
+# AUCMEDI libraries
+from aucmedi.sampling import sampling_kfold
+# ENSMIC libraries
+from ensmic.data_loading import load_sampling, sampling_to_disk
+
+#-----------------------------------------------------#
+#                      Argparser                      #
+#-----------------------------------------------------#
+parse
