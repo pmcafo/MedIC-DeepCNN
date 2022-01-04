@@ -31,4 +31,12 @@ from ensmic.data_loading import load_sampling, sampling_to_disk
 #-----------------------------------------------------#
 #                      Argparser                      #
 #-----------------------------------------------------#
-parse
+parser = argparse.ArgumentParser(description="ENSMIC: Phase I - Training")
+parser.add_argument("-m", "--modularity", help="Data modularity selection: ['covid', 'isic', 'chmnist', 'drd']",
+                    required=True, type=str, dest="seed")
+parser.add_argument("-g", "--gpu", help="GPU ID selection for multi cluster",
+                    required=False, type=int, dest="gpu", default=0)
+args = parser.parse_args()
+
+#-----------------------------------------------------#
+#                    Configurations   
