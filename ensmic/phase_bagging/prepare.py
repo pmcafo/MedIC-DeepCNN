@@ -39,4 +39,22 @@ parser.add_argument("-g", "--gpu", help="GPU ID selection for multi cluster",
 args = parser.parse_args()
 
 #-----------------------------------------------------#
-#                    Configurations   
+#                    Configurations                   #
+#-----------------------------------------------------#
+# Initialize configuration dictionary
+config = {}
+# Path to data directory
+config["path_data"] = "data"
+# Path to result directory
+config["path_results"] = "results"
+# Seed (if training multiple runs)
+config["seed"] = args.seed
+
+# Cross-Validation Configurations
+config["k_fold"] = 5
+
+# Adjust GPU configuration
+config["gpu_id"] = int(args.gpu)
+os.environ["CUDA_VISIBLE_DEVICES"] = str(config["gpu_id"])
+
+#-------------------------------------------
