@@ -57,4 +57,14 @@ config["k_fold"] = 5
 config["gpu_id"] = int(args.gpu)
 os.environ["CUDA_VISIBLE_DEVICES"] = str(config["gpu_id"])
 
-#-------------------------------------------
+#-----------------------------------------------------#
+#              Cross-Validation Sampling              #
+#-----------------------------------------------------#
+# Load sampling from disk
+sampling_train = load_sampling(path_input=config["path_data"],
+                               subset="train-model",
+                               seed=config["seed"])
+(x_train, y_train, nclasses, class_names, image_format) = sampling_train
+sampling_val = load_sampling(path_input=config["path_data"],
+                             subset="val-model",
+          
