@@ -67,4 +67,20 @@ sampling_train = load_sampling(path_input=config["path_data"],
 (x_train, y_train, nclasses, class_names, image_format) = sampling_train
 sampling_val = load_sampling(path_input=config["path_data"],
                              subset="val-model",
-          
+                             seed=config["seed"])
+(x_val, y_val, _, _, _) = sampling_val
+
+# Parse information to config
+config["nclasses"] = nclasses
+config["class_names"] = class_names
+
+# Combine training & validation set
+x_ds = x_train + x_val
+y_ds = np.concatenate((y_train, y_val), axis=0)
+
+# Perform k-fold Cross-Validation sampling
+subsets = sampling_kfold(x_ds, y_ds, n_splits=config["k_fold"],
+                         stratified=True, iterative=False, seed=0)
+
+# Store sampling to disk
+for i, fol
