@@ -83,4 +83,9 @@ subsets = sampling_kfold(x_ds, y_ds, n_splits=config["k_fold"],
                          stratified=True, iterative=False, seed=0)
 
 # Store sampling to disk
-for i, fol
+for i, fold in enumerate(subsets):
+    (x_train, y_train, x_val, y_val) = fold
+    sample_sets = [(x_train, y_train), (x_val, y_val)]
+    setnames = ["cv" + str(i) + "_train", "cv" + str(i) + "_val"]
+    sampling_to_disk(sample_sets, setnames, class_names=config["class_names"],
+                     path_data=config["path_data"], seed=config["seed"])
