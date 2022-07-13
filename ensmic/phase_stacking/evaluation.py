@@ -330,3 +330,6 @@ try:
             + theme_bw(base_size=40))
     # Store figure to disk
     fig.save(filename="plot.ROC.together.png",
+          path=path_eval, width=30, height=20, dpi=200, limitsize=False)
+except:
+    print("ROC-Together plot was not be able to created!")
