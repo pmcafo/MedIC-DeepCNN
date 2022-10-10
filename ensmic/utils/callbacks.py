@@ -23,4 +23,19 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 #-----------------------------------------------------#
 #                   Custom Callbacks                  #
-#-------------------
+#-----------------------------------------------------#
+"""
+Author:   JBSnorro
+Source:   https://stackoverflow.com/questions/53500047/stop-training-in-keras-when-accuracy-is-already-1-0
+
+Changed baseline to act as a real baseline.
+The number of patience epochs are only counted when baseline loss is achieved.
+"""
+class ImprovedEarlyStopping(EarlyStopping):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.baseline_attained = False
+
+    def on_epoch_end(self, epoch, logs=None):
+        if not self.baseline_attained:
+           
