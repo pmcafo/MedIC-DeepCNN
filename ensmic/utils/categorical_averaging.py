@@ -1,3 +1,4 @@
+
 #==============================================================================#
 #  Author:       Dominik Müller                                                #
 #  Copyright:    2020 IT-Infrastructure for Translational Medical Research,    #
@@ -19,32 +20,50 @@
 #-----------------------------------------------------#
 #                   Library imports                   #
 #-----------------------------------------------------#
-from tensorflow.keras.callbacks import EarlyStopping
+# External libraries
+import numpy as np
+import os
+import pandas as pd
+# Internal libraries/scripts
 
 #-----------------------------------------------------#
-#                   Custom Callbacks                  #
+#              Function: Macro Averaging              #
 #-----------------------------------------------------#
-"""
-Author:   JBSnorro
-Source:   https://stackoverflow.com/questions/53500047/stop-training-in-keras-when-accuracy-is-already-1-0
+def macro_averaging(results, dataset, path_eval, index_col="architecture"):
+    # Compute macro average
+    mag = results.groupby(by=[index_col, "metric"], axis=0)
+    macro_averaged = mag.mean()
+    # Reset index of grouped dataframe to normal dataframe back
+    macro_averaged = macro_averaged.reset_index()
+    # Store averaged results to disk
+    path_res = os.path.join(path_eval, "results." + dataset + ".averaged.csv")
+    macro_averaged.to_csv(path_res, index=False)
+    # Compute standard deviation
+    macro_std = mag.std()
+    # Reset index of grouped dataframe to normal dataframe back
+    macro_std = macro_std.reset_index()
+    # Store std results to disk
+    path_res = os.path.join(path_eval, "results." + dataset + ".std.csv")
+    macro_std.to_csv(path_res, index=False)
+    return macro_averaged
 
-Changed baseline to act as a real baseline.
-The number of patience epochs are only counted when baseline loss is achieved.
-"""
-class ImprovedEarlyStopping(EarlyStopping):
-    def __init__(self, *args, **kw):
-        super().__init__(*args, **kw)
-        self.baseline_attained = False
+# Macro-Average AUROC scores
+def macro_average_roc(group):
+    # First aggregate all false positive rates
+    all_fpr = np.unique(group["FPR"])
+    mean_tpr = np.zeros_like(all_fpr)
 
-    def on_epoch_end(self, epoch, logs=None):
-        if not self.baseline_attained:
-            current = self.get_monitor_value(logs)
-            if current is None:
-                return
-            if self.monitor_op(current, self.baseline):
-                if self.verbose > 0:
-                    print('Baseline attained.')
-                self.baseline_attained = True
-            else:
-                return
-        super(ImprovedEarlyStopping, self).on_epoch_end(epoch, logs)
+    # Then interpolate all ROC curves at this points
+    class_list = np.unique(group["class"])
+    fpr_list = [group[group["class"]==c]["FPR"] for c in class_list]
+    tpr_list = [group[group["class"]==c]["TPR"] for c in class_list]
+    for i in range(len(class_list)):
+        mean_tpr += np.interp(all_fpr, fpr_list[i], tpr_list[i])
+
+    # Finally average it and compute AUC
+    mean_tpr /= len(class_list)
+    fpr = all_fpr
+    tpr = mean_tpr
+
+    # Return resulting macro-averaged auroc scores
+    return pd.DataFrame({"FPR": fpr, "TPR": tpr})
