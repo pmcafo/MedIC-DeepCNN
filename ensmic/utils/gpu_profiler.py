@@ -17,4 +17,15 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
 #==============================================================================#
 #-----------------------------------------------------#
-#                   Library imports 
+#                   Library imports                   #
+#-----------------------------------------------------#
+import tensorflow as tf
+
+#-----------------------------------------------------#
+#                     GPU Profiler                    #
+#-----------------------------------------------------#
+# Author: y.selivonchyk
+# Source: https://stackoverflow.com/questions/57915007/how-to-measure-manually-how-much-of-my-gpu-memory-is-used-available
+def get_max_memory_usage(sess):
+    """Might be unprecise. Run after training"""
+    if sess
