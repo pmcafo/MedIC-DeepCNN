@@ -1,3 +1,4 @@
+
 #==============================================================================#
 #  Author:       Dominik Müller                                                #
 #  Copyright:    2020 IT-Infrastructure for Translational Medical Research,    #
@@ -17,18 +18,20 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.       #
 #==============================================================================#
 #-----------------------------------------------------#
+#                     Code Source:                    #
+# https://stackoverflow.com/questions/34968722/how-to #
+# -implement-the-softmax-function-in-python           #
+#-----------------------------------------------------#
+#-----------------------------------------------------#
 #                   Library imports                   #
 #-----------------------------------------------------#
-import tensorflow as tf
+# External libraries
+import numpy as np
 
 #-----------------------------------------------------#
-#                     GPU Profiler                    #
+#                   Softmax Function                  #
 #-----------------------------------------------------#
-# Author: y.selivonchyk
-# Source: https://stackoverflow.com/questions/57915007/how-to-measure-manually-how-much-of-my-gpu-memory-is-used-available
-def get_max_memory_usage(sess):
-    """Might be unprecise. Run after training"""
-    if sess is None: sess = tf.get_default_session()
-    max_mem = int(sess.run(tf.contrib.memory_stats.MaxBytesInUse()))
-    print("Contrib max memory: %f G" % (max_mem / 1024. / 1024. / 1024.))
-    return max_mem
+def softmax(x):
+    """Compute softmax values for each sets of scores in x."""
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
