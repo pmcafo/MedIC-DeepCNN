@@ -26,4 +26,6 @@ setup(
                 "Intended Audience :: Science/Research",
 
                 "Topic :: Scientific/Engineering :: Artificial Intelligence",
-                "Topic :: Scientific/Engineerin
+                "Topic :: Scientific/Engineering :: Image Recognition",
+                "Topic :: Scientific/Engineering :: Medical Science Apps."]
+)
