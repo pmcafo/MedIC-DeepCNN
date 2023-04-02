@@ -15,4 +15,15 @@ setup(
    install_requires=['tensorflow>=2.4.0',
                      'aucmedi>=0.3.0',
                      'pandas>=1.1.4',
-                     '
+                     'pillow>=7.2.0',
+                     'plotnine>=0.7.1',
+                     'tqdm>=4.35.0'],
+   classifiers=["Programming Language :: Python :: 3",
+                "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+                "Operating System :: OS Independent",
+
+                "Intended Audience :: Healthcare Industry",
+                "Intended Audience :: Science/Research",
+
+                "Topic :: Scientific/Engineering :: Artificial Intelligence",
+                "Topic :: Scientific/Engineerin
