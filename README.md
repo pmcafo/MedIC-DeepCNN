@@ -9,4 +9,15 @@ In this work, we proposed a reproducible medical image classification pipeline (
 
 ![theory](docs/figure.theory.png)
 
-We concluded that the integration of
+We concluded that the integration of Stacking and Augmentation ensemble learning techniques is a powerful method for any medical image classification pipeline to improve robustness and boost performance.
+
+The sampling, results, figures and meta data are available under the following link:  
+https://doi.org/10.5281/zenodo.6457912
+
+--------------------------------------------
+
+... (content continues)
+
+
+This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3.
+See the LICENSE.md file for license rights and limitations.
